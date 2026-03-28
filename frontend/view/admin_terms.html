@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>용어 관리</title>
+
+  <link rel="icon" href="./img/favicon.png">
+  <link rel="stylesheet" href="/view/css/my_page_style.css" />
+  <link rel="stylesheet" href="/view/css/main_style.css" />
+  <link rel="stylesheet" href="/view/css/admin_terms.css" />
+</head>
+
+<body>
+  <div id="headerMount" aria-label="공통 헤더"></div>
+
+  <div class="app">
+    <aside id="sidebarMount" class="sidebar" aria-label="사이드바"></aside>
+    <main class="word-main">
+      <div class="word-wrap">
+        <!-- breadcrumb 느낌 -->
+        <div class="word-page-title">용어 관리</div>
+
+        <!-- 관리자 콘솔(장식용 바) -->
+        <section class="console-card" aria-label="관리자 콘솔(장식)">
+          <div class="console-label">관리자 콘솔</div>
+        </section>
+
+        <!-- word-panel (큰 카드) -->
+        <section class="word-panel">
+          <div class="word-toolbar">
+            <div class="word-seg" role="tablist" aria-label="단어 분류">
+              <button class="word-seg-btn is-active" data-seg="ko" role="tab" aria-selected="true">한글</button>
+              <button class="word-seg-btn" data-seg="en" role="tab" aria-selected="false">영문</button>
+              <button class="word-seg-btn" data-seg="num" role="tab" aria-selected="false">숫자</button>
+            </div>
+
+            <!-- 편집/추가/삭제 -->
+            <div class="word-toolbar-right">
+              <button class="word-outline-btn" id="btnEdit" type="button">편집</button>
+              <button class="word-outline-btn" id="btnAdd" type="button">추가</button>
+              <button class="word-outline-btn word-danger-btn" id="btnDelete" type="button">삭제</button>
+            </div>
+          </div>
+
+          <div class="word-indexbar" id="indexBar" aria-label="인덱스"></div>
+
+          <div class="word-body">
+            <!-- 좌: 리스트 -->
+            <aside class="word-list-card">
+              <div class="word-list" id="wordList" role="listbox" aria-label="단어 목록"></div>
+            </aside>
+
+            <!-- 우: 상세 -->
+            <article class="word-detail-card">
+              <div class="word-detail-head">
+                <div class="word-detail-title">
+                  <h2 id="detailTitle">단어를 선택하세요</h2>
+                </div>
+
+                <div class="word-detail-meta" id="detailMeta"></div>
+              </div>
+
+              <div class="word-detail-content" id="detailContent">
+                <div class="word-empty">
+                  <div class="word-empty-emoji">📘</div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+        </section>
+      </div>
+    </main>
+
+    <!-- 모달(추가/편집/삭제 공용) -->
+    <div class="modal-backdrop" id="wordModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wmTitle">
+        <div class="modal-head">
+          <div class="modal-title" id="wmTitle">제목</div>
+          <button class="modal-close" type="button" data-wm-close aria-label="닫기">✕</button>
+        </div>
+        <div class="modal-body" id="wmBody"></div>
+        <div class="modal-foot" id="wmFoot"></div>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="/static/header_init.js" defer></script>
+  <script src="/static/base.js" defer></script>
+  <script src="/static/sidebar_init.js" defer></script>
+  <script src="/static/sidebar.js" defer></script>
+  <script src="/static/admin_terms.js" defer></script>
+</body>
+
+</html>

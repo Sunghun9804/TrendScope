@@ -1,0 +1,189 @@
+/* base */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR",
+               Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color:#0f172a;
+  background:
+    radial-gradient(900px 520px at 18% 42%, rgba(4,98,210,.12) 0%, rgba(4,98,210,0) 62%),
+    radial-gradient(760px 460px at 36% 68%, rgba(59,130,246,.08) 0%, rgba(59,130,246,0) 58%),
+    linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+}
+
+a{ color:inherit; text-decoration:none; }
+
+/* layout */
+#tsLoginWrap{
+  min-height: calc(100vh - 120px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 16px;
+}
+#tsShell{
+  width:min(1080px,100%);
+  display:flex;
+  gap:32px;
+  align-items:center;
+}
+
+/* left */
+#tsLeft{ flex:1.2; padding:12px 8px; }
+#tsLeft .logo{ font-size:44px; font-weight:800; letter-spacing:-0.02em; color:#0462D2; }
+#tsLeft .desc{ margin:10px 0 0; color:#475569; line-height:1.6; font-size:15px; }
+#tsLeft .status{
+  display:inline-flex;align-items:center;gap:10px;margin-top:18px;
+  padding:10px 12px;border-radius:999px;
+  background: rgba(4,98,210,.06);
+  border: 1px solid rgba(4,98,210,.16);
+  font-size:13px;color:#1f2937;
+}
+#tsLeft .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,.14);
+  display:inline-block;
+}
+
+/* right card */
+#tsRight{ flex:.9; width:100%; max-width:420px; }
+#tsCard{
+  background:#fff;
+  border-radius:18px;
+  padding:26px 26px 22px;
+  box-shadow: 0 18px 60px rgba(15,23,42,.10);
+  border: 1px solid rgba(15,23,42,.06);
+}
+#tsTitle{ margin-bottom:18px; }
+#tsTitle .h{ font-size:24px; font-weight:800; color:#111827; letter-spacing:-0.02em; }
+#tsTitle .s{ margin-top:6px; font-size:13px; color:#6b7280; }
+
+/* error msg (7번) */
+#tsErrorMsg{
+  margin-top:8px;
+  font-size:13px;
+  color:#ef4444;
+  line-height:1.35;
+  display:none;
+}
+#tsErrorMsg b{ font-weight:800; }
+
+/* input group */
+.tsGroup{
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+  transition: border-color .15s, box-shadow .15s;
+}
+.tsGroup.isFocus{
+  border-color:#0462D2;
+  box-shadow:0 0 0 4px rgba(4,98,210,.12);
+}
+.tsGroup.isError{
+  border-color:#ef4444 !important;
+  box-shadow:0 0 0 4px rgba(239,68,68,.12) !important;
+}
+.tsRow{ padding:10px 12px; }
+.tsLabel{ font-size:12px; color:#9ca3af; margin-bottom:6px; }
+.tsInput{
+  width:100%;
+  height:30px;
+  border:0;
+  outline:0;
+  font-size:14px;
+  color:#111827;
+  background:transparent;
+}
+.tsDivider{ height:1px; background:#eef2f7; }
+
+.tsOpt{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:12px 2px 14px;
+}
+.tsRemember{ display:flex; align-items:center; gap:8px; color:#6b7280; font-size:13px; }
+.tsRemember input{ width:16px; height:16px; accent-color:#0462D2; }
+.tsLink{ color:#6b7280; font-size:13px; text-decoration:none; }
+.tsLinkBlue{ color:#0462D2; font-weight:800; text-decoration:none; }
+
+#tsLoginBtn{
+  width:100%;
+  height:46px;
+  border-radius:10px;
+  border:0;
+  background:#d1d5db;
+  color:#fff;
+  font-weight:800;
+  cursor:not-allowed;
+  transition:background .15s;
+}
+#tsHelper{ margin-top:10px; font-size:12px; color:#9ca3af; text-align:center; }
+
+.tsHr{
+  display:flex;align-items:center;gap:12px;margin:18px 0;
+  color:#9ca3af;font-size:12px;
+}
+.tsHr span{ flex:1; height:1px; background:#e5e7eb; }
+
+#tsSignup{
+  display:flex;align-items:center;justify-content:center;
+  height:46px;border-radius:10px;
+  background:#0462D2;color:#fff;
+  font-size:15px;font-weight:800;
+}
+
+/* footer */
+#tsFoot{
+  display:flex;justify-content:center;gap:14px;margin-top:14px;
+  font-size:12px;color:#64748b;
+}
+#tsFoot .sep{ color:#cbd5e1; }
+
+/* ✅ 잠금 팝업(사진 스타일) */
+#tsLockLayer{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  background: rgba(15, 23, 42, 0.08);
+  padding: 24px;
+}
+#tsLockModal{
+  width: min(760px, 92vw);
+  background:#fff;
+  border-radius:24px;
+  box-shadow: 0 30px 90px rgba(15,23,42,.18);
+  padding: 56px 24px 48px;
+  text-align:center;
+  border:1px solid rgba(15,23,42,.06);
+}
+#tsLockText{
+  font-size:16px;
+  color:#6b7280;
+  line-height:1.6;
+  margin:0 0 28px;
+}
+#tsLockBtn{
+  width: min(520px, 90%);
+  height:56px;
+  border:0;
+  border-radius:14px;
+  background:#0462D2;
+  color:#fff;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* responsive */
+@media (max-width:980px){
+  #tsShell{ gap:0; }
+  #tsLeft{ display:none; }
+}

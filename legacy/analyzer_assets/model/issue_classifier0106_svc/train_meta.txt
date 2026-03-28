@@ -1,0 +1,12 @@
+trained_at: 2026-01-06T19:07:56.522203
+data_dir: data
+csv_pattern: *_with_article.csv
+embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+max_seq_length: 500
+embed_batch_size: 32
+test_size: 0.2
+random_state: 42
+best_metric: f1(weighted)
+best_params: C=10.0, class_weight=None, max_iter=2000
+best_acc: 0.664452
+best_f1_weighted: 0.660886

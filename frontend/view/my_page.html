@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>비밀번호 확인</title>
+
+  <link rel="icon" href="/view/img/favicon.png">
+  <link rel="stylesheet" href="/view/css/main_style.css" />
+  <link rel="stylesheet" href="/view/css/my_page_style.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+  <div id="headerMount" aria-label="공통 헤더"></div>
+
+  <div class="app">
+    <aside id="sidebarMount" class="sidebar" aria-label="사이드바"></aside>
+    <main class="content">
+      <div class="card">
+        <div class="card-top">
+          <h2>마이페이지</h2>
+          <p class="description">마이페이지 조회를 위해 비밀번호 확인이 필요합니다.</p>
+        </div>
+
+        <div class="card-scroll">
+          <form action="info_edit.html" method="get" id="pwForm" class="form">
+            <label for="password" class="visually-hidden">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력해 주세요." required />
+            <p id="pwError" class="error" aria-live="polite"></p>
+            <button type="submit" class="OK">확인</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const ENDPOINT_VERIFY_PW = "/mypage/password_check";
+
+    async function verifyPassword(pw) {
+      const res = await fetch(ENDPOINT_VERIFY_PW, {
+        method: "POST",
+        credentials: "include",
+        redirect: "manual",               // 중요: 307 redirect 따라가지 않기
+        headers: { "Accept": "application/json" },
+        body: new URLSearchParams({ pw })
+      });
+
+      // redirect 응답이면(성공 케이스) 여기서 OK 처리
+      // 브라우저마다 manual redirect가 'opaqueredirect'(status 0)로 오기도 함
+      if (res.type === "opaqueredirect") return { ok: true };
+      if (res.status >= 300 && res.status < 400) return { ok: true };
+
+      // 실패면 JSON({success:false,...})가 옴
+      const ct = (res.headers.get("content-type") || "").toLowerCase();
+      if (ct.includes("application/json")) {
+        const json = await res.json().catch(() => ({}));
+        return { ok: false, message: json.message || json.msg || "비밀번호 확인 실패" };
+      }
+
+      // 혹시 200인데 HTML이 오면 성공으로 간주(예외 안전장치)
+      const text = await res.text().catch(() => "");
+      if (/<html/i.test(text)) return { ok: true };
+
+      return { ok: false, message: "비밀번호 확인에 실패했습니다." };
+    }
+
+    document.getElementById("pwForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const pw = (document.getElementById("password").value || "").trim();
+      const err = document.getElementById("pwError");
+
+      if (!pw) { err.textContent = "비밀번호를 입력해 주세요."; return; }
+      err.textContent = "";
+
+      try {
+        const result = await verifyPassword(pw);
+
+        if (!result.ok) {
+          err.textContent = result.message;
+          return;
+        }
+
+        // 백엔드가 info_update에서 pw 필수라서(수정 불가 조건) 저장
+        sessionStorage.setItem("verifiedPw", pw);
+
+        // 성공 이동은 우리가 직접 GET 라우트로 이동
+        location.href = "/info_edit";
+      } catch {
+        err.textContent = "비밀번호 확인 중 오류가 발생했습니다.";
+      }
+    });
+
+  </script>
+  <script src="/static/header_init.js" defer></script>
+  <script src="/static/base.js" defer></script>
+  <script src="/static/sidebar_init.js" defer></script>
+  <script src="/static/sidebar.js" defer></script>
+</body>
+
+</html>

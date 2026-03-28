@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 - 수동 재실행</title>
+
+  <link rel="icon" href="./img/favicon.png" />
+
+  <link rel="stylesheet" href="/view/css/my_page_style.css" />
+  <link rel="stylesheet" href="/view/css/main_style.css" />
+  <link rel="stylesheet" href="/view/css/admin.css" />
+  <link rel="stylesheet" href="/view/css/admin_rerun.css" />
+
+  <style>
+    body.preauth {
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body class="preauth layout-admin page-admin-rerun">
+  <div id="headerMount" aria-label="공통 헤더"></div>
+
+  <div class="app">
+    <aside id="sidebarMount" class="sidebar" aria-label="사이드바"></aside>
+    <main class="mains">
+      <!-- ✅ 추가: word.html의 "단어 사전" 느낌 -->
+      <div class="admin-page-title">관리자 콘솔</div>
+
+      <div class="main-toolbar admin-toolbar">
+        <div class="admin-pill" id="runRatePill" title="재분석 진행률" hidden>
+          <span class="admin-pill__label" id="runRateLabel">재분석 실행 중</span>
+          <button type="button" class="admin-pill__info" id="runRateInfo" aria-label="진행 안내" title="안내">i</button>
+          <strong id="runRate">(0%)</strong>
+        </div>
+
+
+
+        <div class="date-range admin-date-range">
+          <label class="date-pill">
+            <span class="date-icon" aria-hidden="true">📅</span>
+            <span class="date-label">시작일</span>
+            <input id="startDate" type="date" />
+          </label>
+
+          <label class="date-pill">
+            <span class="date-icon" aria-hidden="true">📅</span>
+            <span class="date-label">종료일</span>
+            <input id="endDate" type="date" />
+          </label>
+
+          <button type="button" class="admin-btn admin-btn--primary" id="btnSearch">조회</button>
+          <button type="button" class="admin-btn admin-btn--ghost" id="btnRun" disabled>실행</button>
+        </div>
+      </div>
+
+      <div class="main-scroll">
+        <section class="admin-panel rerun-panel">
+          <!-- 모델/리스트 상단 바 -->
+          <div class="rerun-bar">
+            <!-- 왼쪽: 결측치 LIST -->
+            <div class="rerun-bar__left">
+              <div class="rerun-list-title">결측치 LIST</div>
+            </div>
+
+            <!-- 오른쪽: 칩(Keyword~Summary + 전체선택 + 전체해제) -->
+            <div class="rerun-bar__right">
+              <div class="rerun-chips" id="modelChips" aria-label="분석 모델 선택">
+                <!-- ✅ 설계서 순서: keyword → sentiment → trust → summary → 전체선택 → 전체해제 -->
+                <button type="button" class="rerun-chip is-active" data-model="keyword">
+                  <span class="rerun-dot" aria-hidden="true"></span> Keyword
+                </button>
+
+                <button type="button" class="rerun-chip is-active" data-model="sentiment">
+                  <span class="rerun-dot" aria-hidden="true"></span> Sentiment
+                </button>
+
+                <button type="button" class="rerun-chip is-active" data-model="trust">
+                  <span class="rerun-dot" aria-hidden="true"></span> Trust
+                </button>
+
+                <button type="button" class="rerun-chip is-active" data-model="summary">
+                  <span class="rerun-dot" aria-hidden="true"></span> Summary
+                </button>
+
+                <button type="button" class="rerun-chip rerun-chip--mini" id="chipAll">전체 선택</button>
+                <button type="button" class="rerun-chip rerun-chip--mini" id="chipClear">전체 해제</button>
+              </div>
+
+              <!-- ✅ '초기값으로'는 UI에서 제거(숨김)
+                     (JS가 btnReset을 참조할 수 있어서 hidden으로만 유지) -->
+              <button type="button" class="admin-btn admin-btn--ghost" id="btnReset" hidden aria-hidden="true"
+                tabindex="-1">초기값으로</button>
+            </div>
+          </div>
+
+
+          <div class="admin-table-wrap rerun-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width:54px;">
+                    <input type="checkbox" class="rerun-check" id="checkAllRows" aria-label="전체 선택" />
+                  </th>
+                  <th style="width:360px;">article_id</th>
+                  <th data-col="keyword">Keyword</th>
+                  <th data-col="sentiment">Sentiment</th>
+                  <th data-col="trust">Trust</th>
+                  <th data-col="summary">Summary</th>
+                </tr>
+              </thead>
+            </table>
+
+            <div class="admin-table-body rerun-table-body" id="tableBodyWrap">
+              <table class="admin-table admin-table--body">
+                <tbody id="tbodyArticles"></tbody>
+              </table>
+            </div>
+
+            <div class="admin-empty" id="emptyState" hidden>
+              조회 결과가 없습니다.
+              <div class="rerun-empty-sub" id="emptyHint">조건을 변경한 뒤 조회해 주세요.</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="admin-toast" id="toast" hidden>
+          <div class="admin-toast__icon">i</div>
+          <div class="admin-toast__text" id="toastText"></div>
+          <button class="admin-toast__close" id="btnToastClose" aria-label="닫기">×</button>
+        </div>
+
+        <div class="admin-confirm" id="confirmModal" hidden>
+          <div class="admin-confirm__backdrop" data-close="true"></div>
+          <div class="admin-confirm__card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <div class="admin-confirm__title" id="confirmTitle">※ 실행 전 확인 ※</div>
+            <div class="admin-confirm__desc" id="confirmDesc"></div>
+            <div class="admin-confirm__actions">
+              <button type="button" class="admin-btn admin-btn--ghost" id="btnConfirmCancel">취소</button>
+              <button type="button" class="admin-btn admin-btn--primary" id="btnConfirmOk">확인</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/header_init.js" defer></script>
+  <script src="/static/sidebar_init.js" defer></script>
+  <script src="/static/sidebar.js" defer></script>
+
+  <script>
+    async function requireAdminOrRedirect() {
+      try {
+        const r = await fetch("/api/session", { credentials: "include", cache: "no-store" });
+        if (!r.ok) throw new Error("session api failed");
+        const body = await r.json();
+
+        const loggedIn = !!body.logged_in;
+        const isAdmin = loggedIn && !!body.admin_in;
+
+        if (!loggedIn) {
+          location.replace("/login");
+          return false;
+        }
+        if (!isAdmin) {
+          alert("관리자로 등록된 회원만 접근 가능합니다.");
+          location.replace("/main");
+          return false;
+        }
+
+        document.body.classList.remove("preauth");
+        return true;
+      } catch (e) {
+        location.replace("/login");
+        return false;
+      }
+    }
+
+    function loadRerunJs() {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "/static/admin_rerun.js";
+        s.defer = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => reject(new Error("failed to load /static/admin_rerun.js"));
+        document.body.appendChild(s);
+      });
+    }
+
+    (async function boot() {
+      const ok = await requireAdminOrRedirect();
+      if (!ok) return;
+
+      try {
+        await loadRerunJs();
+      } catch (e) {
+        console.error(e);
+        alert("관리자 스크립트 로딩에 실패했습니다.");
+      }
+    })();
+  </script>
+</body>
+
+</html>

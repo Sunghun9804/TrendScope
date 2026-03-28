@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrendScope - 비밀번호 찾기</title>
+  <link rel="stylesheet" href="/view/css/find_pw.css">
+</head>
+<body>
+  <div id="tsFindWrap">
+    <div id="tsShell">
+
+      <!-- LEFT -->
+      <div id="tsLeft">
+        <div class="logo"><a href="/">TrendScope</a></div>
+        <p class="desc">
+          통합 ID로 TrendScope의 모든 서비스를 이용할 수 있습니다.<br>
+          경제 이슈와 키워드를 한 번에 탐색하세요.
+        </p>
+        <div class="status">
+          <span class="dot"></span>
+          오늘의 데이터 업데이트 완료
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div id="tsRight">
+        <div id="tsCard">
+          <div id="tsTitle">
+            <div class="h">비밀번호 찾기</div>
+          </div>
+
+          <form id="findPwForm" action="#">
+            <div class="tsField">
+              <div class="tsLabel">아이디 <span class="tsReq">필수</span></div>
+              <input id="fpId" class="tsInput" type="text" placeholder="아이디" autocomplete="username" />
+            </div>
+
+            <div class="tsField">
+              <div class="tsLabel">이름 <span class="tsReq">필수</span></div>
+              <input id="fpName" class="tsInput" type="text" placeholder="이름" autocomplete="name" />
+            </div>
+
+            <div class="tsField">
+              <div class="tsLabel">이메일 <span class="tsReq">필수</span></div>
+              <input id="fpEmail" class="tsInput" type="email" placeholder="이메일" autocomplete="email" />
+            </div>
+
+            <!-- L1 버튼(확인) -->
+            <button class="tsBtnPrimary" id="fpSubmit" type="submit">확인</button>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ✅ 팝업(2-1~2-4) -->
+  <div id="tsPopupLayer" aria-hidden="true">
+    <div id="tsPopup" role="dialog" aria-modal="true" aria-labelledby="tsPopupText">
+      <p id="tsPopupText">-</p>
+      <button id="tsPopupBtn" type="button">확인</button>
+    </div>
+  </div>
+<script>
+  // =========================
+  // TrendScope - Find Password (AJAX)
+  // 서버: http://127.0.0.1:8000
+  // API : POST /password_check  (FormData로 전송)
+  // =========================
+
+  const DEBUG = false;
+  const API_BASE = window.location.origin; // 보통 http://127.0.0.1:8000
+
+  // ====== Popup (기존 UI 유지) ======
+  const layer = document.getElementById("tsPopupLayer");
+  const textEl = document.getElementById("tsPopupText");
+  const btnEl  = document.getElementById("tsPopupBtn");
+
+  function openPopup(message){
+    textEl.textContent = message;
+    layer.style.display = "flex";
+    layer.setAttribute("aria-hidden", "false");
+    btnEl.focus();
+  }
+  function closePopup(){
+    layer.style.display = "none";
+    layer.setAttribute("aria-hidden", "true");
+  }
+
+  btnEl.addEventListener("click", closePopup);
+  window.addEventListener("keydown", (e)=>{
+    if (e.key === "Escape" && layer.style.display === "flex") closePopup();
+  });
+
+  // ====== 작은 화면 로그 패널(선택) ======
+  const debugBox = document.createElement("pre");
+  debugBox.id = "fpDebugBox";
+  debugBox.style.cssText = `
+    margin-top:16px; padding:12px; border:1px solid #e5e7eb; border-radius:10px;
+    background:#0b1020; color:#d1e7ff; font-size:12px; line-height:1.35;
+    max-height:180px; overflow:auto; display:${DEBUG ? "block" : "none"};
+  `;
+  debugBox.textContent = "[DEBUG] find_pw logs...\n";
+  // 카드 아래에 붙이기
+  const card = document.getElementById("tsCard");
+  if (card) card.appendChild(debugBox);
+
+  function uiLog(...args){
+    if (!DEBUG) return;
+    const line = args.map(a => (typeof a === "string" ? a : JSON.stringify(a, null, 2))).join(" ");
+    debugBox.textContent += line + "\n";
+    debugBox.scrollTop = debugBox.scrollHeight;
+  }
+
+  // ====== Utils ======
+  function n(s){ return (s || "").trim(); }
+  function nEmail(s){ return n(s).toLowerCase(); }
+
+  // ====== Form Elements ======
+  const form = document.getElementById("findPwForm");
+  const fpId = document.getElementById("fpId");
+  const fpName = document.getElementById("fpName");
+  const fpEmail = document.getElementById("fpEmail");
+  const fpSubmit = document.getElementById("fpSubmit");
+
+  // ====== AJAX Call ======
+  async function requestPasswordCheck({ user_id, name, email }){
+    const url = `${API_BASE}/password_check`;
+
+    // FastAPI Form(...) 대응: FormData 사용
+    const fd = new FormData();
+    fd.append("user_id", user_id);
+    fd.append("name", name);
+    fd.append("email", email);
+
+    if (DEBUG){
+      console.groupCollapsed("[find_pw] /password_check request");
+      console.log("URL:", url);
+      console.log("payload:", { user_id, name, email });
+      console.groupEnd();
+      uiLog("REQUEST =>", { url, user_id, name, email });
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      body: fd,
+      // 세션(쿠키) 쓰는 엔드포인트라 명시적으로 include 추천
+      credentials: "include",
+    });
+
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch {
+      data = { success: false, message: "서버 응답이 JSON이 아닙니다.", raw: text };
+    }
+
+    if (DEBUG){
+      console.groupCollapsed("[find_pw] /password_check response");
+      console.log("status:", res.status);
+      console.log("data:", data);
+      console.groupEnd();
+      uiLog("RESPONSE <=", { status: res.status, data });
+    }
+
+    // HTTP 자체가 실패(500 등)여도 body는 올 수 있어서 success 기준은 data.success로 판단
+    return data;
+  }
+
+  // ====== Submit Handler ======
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const user_id = n(fpId.value);
+    const name = n(fpName.value);
+    const email = nEmail(fpEmail.value);
+
+    // (프론트) 필수값 검증: 서버와 동일하게 먼저 걸러주기
+    if (!user_id) { openPopup("아이디 항목은\n필수 입력값입니다."); fpId.focus(); return; }
+    if (!name)    { openPopup("이름 항목은\n필수 입력값입니다."); fpName.focus(); return; }
+    if (!email)   { openPopup("이메일 항목은\n필수 입력값입니다."); fpEmail.focus(); return; }
+
+    // 버튼 비활성화 (중복 클릭 방지)
+    fpSubmit.disabled = true;
+    fpSubmit.textContent = "확인 중...";
+
+    try {
+      const result = await requestPasswordCheck({ user_id, name, email });
+
+      if (!result || result.success !== true) {
+        // 서버에서 내려준 message를 그대로 보여주기
+        openPopup(result?.message || "본인 확인에 실패했습니다.");
+        return;
+      }
+
+      // 성공: 서버 세션에 pw_reset_user 저장됨 -> pw_change로 이동
+      openPopup("본인 확인이 완료되었습니다.\n비밀번호 변경 페이지로 이동합니다.");
+      setTimeout(() => {
+        // main.py에 /pw_change 라우트가 있고 /view/pw_change.html로 리다이렉트됨
+        window.location.href = `${API_BASE}/pw_change`;
+      }, 600);
+
+    } catch (err) {
+      console.error("[find_pw] error:", err);
+      uiLog("ERROR !!", String(err));
+      openPopup("서버 요청 중 오류가 발생했습니다.\n콘솔 로그를 확인해주세요.");
+    } finally {
+      fpSubmit.disabled = false;
+      fpSubmit.textContent = "확인";
+    }
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+/* ✅ 스코프(다른 CSS 충돌 방지) */
+#tsFindIdPage{
+  --brand:#0462D2;
+  --text:#0f172a;
+  --muted:#64748b;
+  --shadow: 0 18px 60px rgba(15,23,42,.07);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR",
+               Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+#tsFindIdPage *{box-sizing:border-box}
+
+/* 배경/레이아웃 */
+#tsFindIdPage .tsWrap{
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 16px;
+  background:
+    radial-gradient(900px 520px at 18% 42%, rgba(4,98,210,.12) 0%, rgba(4,98,210,0) 62%),
+    radial-gradient(760px 460px at 36% 68%, rgba(59,130,246,.08) 0%, rgba(59,130,246,0) 58%),
+    linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+}
+#tsFindIdPage .tsShell{
+  width:min(1200px, 100%);
+  display:flex;
+  align-items:center;
+  gap:32px;
+}
+#tsFindIdPage a{
+  color: inherit;
+  text-decoration: none;
+}
+
+/* LEFT */
+#tsFindIdPage .tsLeft{flex:1.2; padding:12px 8px;}
+#tsLeft .logo{ font-size:44px; font-weight:800; letter-spacing:-0.02em; color:#0462D2; }
+#tsFindIdPage .tsDesc{
+  margin:10px 0 0; color:#475569; line-height:1.6; font-size:15px;
+}
+#tsFindIdPage .tsStatus{
+  display:inline-flex; align-items:center; gap:10px; margin-top:18px;
+  padding:10px 12px; border-radius:999px;
+  background: rgba(4,98,210,.06);
+  border: 1px solid rgba(4,98,210,.16);
+  font-size:13px; color:#1f2937;
+}
+#tsFindIdPage .tsDot{
+  width:8px;height:8px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,.14);
+  display:inline-block;
+}
+
+/* RIGHT CARD */
+#tsFindIdPage .tsRight{flex:.9; width:100%; max-width:520px;}
+#tsFindIdPage .tsCard{
+  background:#fff;
+  border-radius:18px;
+  padding:26px 26px 22px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(15,23,42,.06);
+}
+#tsFindIdPage .tsTitle{
+  margin:0 0 14px;
+  font-size:18px;
+  font-weight:900;
+  color:#111827;
+  letter-spacing:-0.02em;
+}
+
+/* 필드 */
+#tsFindIdPage .tsField{margin-top:14px;}
+#tsFindIdPage .tsLabelRow{
+  display:flex; align-items:center; gap:10px;
+  font-size:13px; font-weight:800; color:#111827;
+  margin:0 0 8px;
+}
+#tsFindIdPage .tsReq{
+  font-size:11px;
+  color:#ef4444;
+  border:1px solid rgba(239,68,68,.28);
+  background:rgba(239,68,68,.06);
+  padding:2px 8px;
+  border-radius:999px;
+  font-weight:900;
+  line-height:1.2;
+}
+#tsFindIdPage .tsInput{
+  width:100%;
+  height:38px;
+  border-radius:8px;
+  border:1px solid #e7eef8;
+  background:#fff;
+  padding:0 12px;
+  outline:0;
+  font-size:13px;
+  color:#111827;
+  display:block;
+}
+#tsFindIdPage .tsInput:focus{
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(4,98,210,.10);
+}
+
+/* 버튼 */
+#tsFindIdPage .tsBtn{
+  width:100%;
+  height:44px;
+  margin-top:22px;
+  border:0;
+  border-radius:10px;
+  background:var(--brand);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow: 0 12px 28px rgba(4,98,210,.20);
+  font-size:13px;
+}
+#tsFindIdPage .tsBtn:active{transform:translateY(1px)}
+
+/* ✅ 결과 UI (요청하신 화면) */
+#tsFindIdPage .tsResultWrap{
+  margin-top: 10px;
+}
+#tsFindIdPage .tsResultBox{
+  border: 1px solid rgba(15,23,42,.10);
+  border-radius: 12px;
+  background: #fff;
+  padding: 18px 16px;
+  text-align: center;
+}
+#tsFindIdPage .tsResultMsg{
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #111827;   /* ✅ 진한 검정 */
+  font-weight: 900; /* ✅ 더 진하게(선택) */
+  letter-spacing: -0.01em;
+}
+
+#tsFindIdPage .tsResultId{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 1000;
+  color: var(--brand);
+  letter-spacing: -0.01em;
+  word-break: break-all;
+}
+
+#tsFindIdPage .tsActionGroup{
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+#tsFindIdPage .tsActionBtn{
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 1000;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  user-select: none;
+}
+#tsFindIdPage .tsActionBtnPrimary{
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 12px 28px rgba(4,98,210,.20);
+}
+#tsFindIdPage .tsActionBtnPrimary:active{transform:translateY(1px)}
+#tsFindIdPage .tsActionBtnGhost{
+  background: #fff;
+  color: #111827;
+  border: 1px solid rgba(15,23,42,.16);
+}
+#tsFindIdPage .tsActionBtnGhost:hover{
+  background: rgba(4,98,210,.04);
+}
+
+/* 상태 토글 */
+#tsFindIdPage .isHidden{display:none !important;}
+
+@media (max-width:980px){
+  #tsFindIdPage .tsShell{gap:0;}
+  #tsFindIdPage .tsLeft{display:none;}
+  #tsFindIdPage .tsRight{max-width:560px;}
+}
+
+/* ===== 팝업(2,3번 이미지 느낌) ===== */
+#tsFindIdPage #tsPopupLayer{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  background: rgba(15, 23, 42, 0.08);
+  padding: 24px;
+}
+#tsFindIdPage #tsPopup{
+  width:min(520px, 92vw);
+  background:#fff;
+  border-radius:18px;
+  box-shadow: 0 30px 90px rgba(15,23,42,.18);
+  border:1px solid rgba(15,23,42,.06);
+  padding: 46px 22px 26px;
+  text-align:center;
+}
+#tsFindIdPage #tsPopupText{
+  margin:0 0 18px;
+  color:#6b7280;
+  font-size:13px;
+  line-height:1.6;
+  font-weight:700;
+  white-space:pre-line;
+}
+#tsFindIdPage #tsPopupBtn{
+  width:min(320px, 90%);
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:var(--brand);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow: 0 12px 28px rgba(4,98,210,.20);
+}

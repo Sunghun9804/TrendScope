@@ -1,0 +1,217 @@
+/* admin_rerun.css : admin.html 톤 유지 + rerun 전용만 추가 */
+
+.page-admin-rerun .admin-pill--muted{
+  background: #f5f8ff;
+  border-color: #dfe8f7;
+  color: #6a7a93;
+}
+
+/* =========================
+   admin_rerun: 페이지 타이틀 (word-page-title 동일 톤)
+   ========================= */
+.page-admin-rerun .admin-page-title{
+  font-size: 13px;
+  font-weight: 900;
+  color: #6a7a93;
+  padding: 2px 6px 0;
+  margin: 2px 0 8px;
+}
+
+/* =========================
+   설계서 맞춤: rerun-bar 좌/우 구성
+   - 좌: "결측치 LIST"
+   - 우: 모델칩(Keyword~Summary + 전체선택 + 전체해제)
+   ========================= */
+.page-admin-rerun .rerun-bar{
+  padding: 12px 12px 0;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-admin-rerun .rerun-bar__left{
+  display:flex;
+  align-items:center;
+  min-width: 160px;
+}
+
+.page-admin-rerun .rerun-list-title{
+  font-size: 13px;
+  font-weight: 1000;
+  color: #1d2b42;
+  padding: 2px 2px 0;
+}
+
+.page-admin-rerun .rerun-bar__right{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* chips */
+.page-admin-rerun .rerun-chips{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items:center;
+}
+
+.page-admin-rerun .rerun-chip{
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  color: #24324a;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 1000;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  user-select:none;
+}
+
+.page-admin-rerun .rerun-chip:hover{ background: #f7fbff; }
+
+.page-admin-rerun .rerun-chip.is-active{
+  background: #e8f1ff;
+  border-color: #a6c8ef;
+  color: #0462D2;
+}
+
+.page-admin-rerun .rerun-chip--mini{
+  border-style: dashed;
+  padding: 7px 12px;
+  font-size: 11px;
+}
+
+.page-admin-rerun .rerun-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+  background: #dfe8f7;
+  border: 1px solid #c7d6f5;
+}
+
+.page-admin-rerun .rerun-chip.is-active .rerun-dot{
+  background: #0462D2;
+  border-color: rgba(4,98,210,.35);
+}
+
+/* table wrap spacing */
+.page-admin-rerun .rerun-table-wrap{ padding-top: 10px; }
+.page-admin-rerun .rerun-table-body{ max-height: 560px; }
+
+/* checkbox */
+.page-admin-rerun .rerun-check{
+  width: 16px;
+  height: 16px;
+  accent-color: #0462D2;
+  cursor: pointer;
+}
+
+/* =========================
+   ✅ 설계서 느낌: Null = pill, OK = dot(·)
+   ========================= */
+.page-admin-rerun .rerun-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 1000;
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color: #6a7a93;
+}
+
+/* Null pill */
+.page-admin-rerun .rerun-pill.is-null{
+  min-width: 56px;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  border-color: #a6c8ef;
+  background: #e8f1ff;
+  color: #0462D2;
+}
+
+/* OK dot */
+.page-admin-rerun .rerun-pill.is-dot{
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  padding: 0;
+  border-radius: 999px;
+
+  background: #e8f1ff;
+  border-color: #c7d6f5;
+  color: #0462D2;
+
+  font-size: 16px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* article_id */
+.page-admin-rerun .rerun-mono{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #24324a;
+}
+
+.page-admin-rerun .rerun-empty-sub{
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #8a97ad;
+}
+
+/* locked */
+.page-admin-rerun.rerun-running .rerun-chip,
+.page-admin-rerun.rerun-running .rerun-check{
+  pointer-events: none;
+  opacity: .65;
+}
+
+/* ================================
+   ✅ admin_rerun: 공통헤더(authArea) CSS 충돌 방지
+   ================================ */
+body.page-admin-rerun .topbar #authArea{
+  background: transparent !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+body.page-admin-rerun .topbar #authArea .topbar__link{
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+body.page-admin-rerun .topbar #authArea .topbar__btn{
+  color: #0462D2 !important;
+  -webkit-text-fill-color: #0462D2 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+
+  text-indent: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 980px){
+  .page-admin-rerun .rerun-bar{ padding: 10px 10px 0; }
+  .page-admin-rerun .rerun-table-body{ max-height: 520px; }
+}

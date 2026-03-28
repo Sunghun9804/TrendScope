@@ -1,0 +1,76 @@
+# ─── 환경 변수 / 민감 정보 ────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ─── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# 가상환경
+.venv/
+venv/
+env/
+ENV/
+
+# 배포/빌드
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# mypy / type checkers
+.mypy_cache/
+.pyre/
+
+# ─── Frontend 빌드 ────────────────────────────────────────
+dist/
+
+# ─── IDE ──────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ─── OS ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── 로그 ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── DB ───────────────────────────────────────────────────
+*.sqlite3
+*.db
+
+# ─── ML 모델 바이너리 (대용량, Git 제외) ─────────────────
+*.safetensors
+*.joblib
+*.pt
+*.pth
+*.bin
+
+# ─── legacy 학습 데이터 및 체크포인트 ────────────────────
+legacy/analyzer_assets/data/
+legacy/analyzer_assets/model/data/
+legacy/analyzer_assets/model/sentiment_model/checkpoint-*/
+legacy/analyzer_assets/model/sentiment_model/runs/
+legacy/analyzer_assets/old_version/
+legacy/analyzer_assets/model/saved_sub_keywords_csv/
+
+# Portfolio cleanup
+frontend/static/word.json
+frontend/static/word_data/*.json

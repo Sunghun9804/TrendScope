@@ -1,0 +1,294 @@
+<style>
+  /* pseudo-element 아이콘(겹치는 사각형) 완전 제거 */
+  .sidebar .menu a::before,
+  .sidebar .menu a::after,
+  .sidebar .menu li::before,
+  .sidebar .menu li::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* 링크 레이아웃(좌측 여백 과다 방지) */
+  .sidebar .menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 !important;
+    /* ← margin-left 제거 */
+    padding: 16px 14px !important;
+    /* ← 좌측 padding 크게 주지 않기 */
+    text-decoration: none;
+  }
+
+  /* 아이콘 */
+  .sidebar .menu .menu-ico {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 2px solid #cfd6e6;
+    background: #fff;
+    flex: 0 0 auto;
+  }
+
+  .sidebar .menu li.active .menu-ico {
+    border-color: #A6C8EF;
+    background: rgba(4, 98, 210, 0.10);
+  }
+
+  #sidebarMount .ts-is-hidden {
+    display: none !important;
+  }
+
+  /* 로그인 필요 모달: 기본은 숨김, 열릴 때만 표시 */
+  .tsNeedLoginLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    /* ⭐ 기본 숨김 */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 40, 90, 0.35);
+  }
+
+  /* aria-hidden=false 일 때만 보이게 */
+  .tsNeedLoginLayer[aria-hidden="false"] {
+    display: flex;
+  }
+
+  .tsNeedLoginModal {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #dfe8f7;
+    box-shadow: 0 24px 70px rgba(15, 40, 90, 0.22);
+    padding: 30px 50px;
+  }
+
+  .tsNeedLoginTitle {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 900;
+    color: #1d2b42;
+  }
+
+  .tsNeedLoginDesc {
+    margin: 0 0 24px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #6a7a93;
+    line-height: 1.5;
+  }
+
+  .tsNeedLoginBtns {
+    display: flex;
+    gap: 15px;
+  }
+
+  .tsNeedLoginBtn {
+    width: 90px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-weight: 900;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .tsNeedLoginBtn--ghost {
+    background: #fff;
+    border-color: #a6c8ef;
+    color: #0462D2;
+  }
+
+  .tsNeedLoginBtn--primary {
+    background: #0462D2;
+    border-color: #0462D2;
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(4, 98, 210, 0.18);
+  }
+
+  .tsNeedLoginBtn--ghost:hover {
+    background: #e8f1ff;
+  }
+
+  .tsNeedLoginBtn--primary:hover {
+    filter: brightness(0.95);
+  }
+
+  /* 햄버거 버튼 기본 스타일 (JS가 헤더에 삽입) */
+  .tsHamburger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-color: rgba(15, 40, 90, .15);
+    background: #ffffff;
+    border-radius: 12px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .tsHamburger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #0462D2;
+    border-radius: 999px;
+  }
+
+  /* 배경 */
+  .tsSidebarBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 40, 90, .35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+    z-index: 99990;
+  }
+
+  .tsSidebarBackdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ✅ 모바일 사이드바 내부 상단 바 + X 닫기 버튼 */
+  .tsSidebarTop {
+    display: none;
+    /* 기본 숨김(데스크톱) */
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 12px;
+    position: sticky;
+    /* 스크롤 내려도 상단에 붙게 */
+    top: 0;
+    background: #fff;
+    z-index: 2;
+    border-bottom: 1px solid rgba(15, 40, 90, .08);
+  }
+
+  .tsSidebarClose {
+    padding-bottom: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 40, 90, .15);
+    background: #fff;
+    color: #0462D2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* 모바일 사이드바 오버레이 */
+  @media (max-width: 1230px) {
+    .tsHamburger {
+      display: inline-flex;
+    }
+
+    #sidebarMount {
+      display: block !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: min(86vw, 360px);
+      background: #fff;
+      z-index: 99991;
+      transform: translateX(-105%);
+      transition: transform .22s ease;
+      overflow-y: auto;
+    }
+
+    #sidebarMount.is-open {
+      transform: translateX(0);
+    }
+
+    #sidebarMount .tsSidebarTop {
+      display: flex;
+    }
+
+    /* main(topbar) + 다른 페이지(header) 둘 다 커버 */
+    header .header-inner,
+    header .topbar__inner {
+      justify-content: flex-start !important;
+      /* space-between 깨기 */
+      gap: 10px;
+    }
+
+    /* 햄버거를 맨 앞으로 */
+    header .tsHamburger {
+      order: 0;
+    }
+
+    /* 로고는 그 다음 */
+    header .brand {
+      order: 1;
+    }
+
+    /* 오른쪽 메뉴/로그아웃은 끝으로 */
+    header #authArea {
+      margin-left: auto;
+      order: 2;
+    }
+
+    /* authArea가 없는 페이지(my_page/info_edit처럼) 대비 */
+    header .logout-button,
+    header #btnLogout {
+      margin-left: auto;
+      order: 2;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #sidebarMount {
+      width: 100vw;
+    }
+  }
+</style>
+
+<!-- 사이드바 -->
+<ul class="menu">
+  <li><a href="/view/main.html"><span class="menu-ico"></span>경제 키워드 트렌드</a></li>
+  <li><a href="/view/main.html#main2" class="js-scroll"><span class="menu-ico"></span>기사</a></li>
+  <li><a href="/view/main.html#main3" class="js-scroll"><span class="menu-ico"></span>키워드 언급량 및 감성분석</a></li>
+  <li><a href="/view/word.html" data-require-login="true"><span class="menu-ico"></span>단어 사전</a></li>
+  <li><a href="/view/my_page.html" data-require-login="true"><span class="menu-ico"></span>마이페이지</a></li>
+
+  <!-- 관리자 전용(기본 숨김) -->
+  <li class="admin-only ts-is-hidden">
+    <a href="/view/admin.html" data-require-login="true" data-require-admin="true">
+      <span class="menu-ico"></span>수집 모니터링
+    </a>
+  </li>
+  <li class="admin-only ts-is-hidden">
+    <a href="/view/admin_rerun.html" data-require-login="true" data-require-admin="true">
+      <span class="menu-ico"></span>수동 재실행
+    </a>
+  </li>
+  <li class="admin-only ts-is-hidden">
+    <a href="/view/admin_terms.html" data-require-login="true" data-require-admin="true">
+      <span class="menu-ico"></span>용어 관리
+    </a>
+  </li>
+</ul>
+
+<!-- 로그인 필요 모달도 같이(사이드바 누르면 뜨게 하려면 필요) -->
+<div id="tsNeedLoginLayer" class="tsNeedLoginLayer" aria-hidden="true">
+  <div class="tsNeedLoginModal" role="dialog" aria-modal="true" aria-labelledby="tsNeedLoginTitle">
+    <h3 id="tsNeedLoginTitle" class="tsNeedLoginTitle">로그인이 필요합니다</h3>
+    <p class="tsNeedLoginDesc">해당 기능은 로그인 후 이용할 수 있어요.</p>
+
+    <div class="tsNeedLoginBtns">
+      <button id="tsNeedLoginCancel" type="button" class="tsNeedLoginBtn tsNeedLoginBtn--ghost">취소</button>
+      <button id="tsNeedLoginGo" type="button" class="tsNeedLoginBtn tsNeedLoginBtn--primary">로그인</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrendScope - 아이디 찾기</title>
+  <link rel="stylesheet" href="/view/css/find_id.css">
+</head>
+
+<body id="tsFindIdPage">
+  <div class="tsWrap">
+    <div class="tsShell">
+
+      <!-- LEFT -->
+      <div id="tsLeft">
+        <div class="logo"><a href="/">TrendScope</a></div>
+        <p class="tsDesc">
+          통합 ID로 TrendScope의 모든 서비스를 이용할 수 있습니다.<br>
+          경제 이슈와 키워드를 한 번에 탐색하세요.
+        </p>
+        <div class="tsStatus">
+          <span class="tsDot"></span>
+          오늘의 데이터 업데이트 완료
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="tsRight">
+        <div class="tsCard">
+          <div class="tsTitle">아이디 찾기</div>
+
+          <!-- ✅ 입력 폼 (이름 + 이메일) -->
+          <form id="tsFindForm" action="#">
+            <div class="tsField">
+              <div class="tsLabelRow">이름 <span class="tsReq">필수</span></div>
+              <input id="tsName" class="tsInput" type="text" placeholder="이름" autocomplete="name" />
+            </div>
+
+            <div class="tsField">
+              <div class="tsLabelRow">이메일 <span class="tsReq">필수</span></div>
+              <input id="tsEmail" class="tsInput" type="email" placeholder="이메일" autocomplete="email" />
+            </div>
+
+            <button class="tsBtn" type="submit">확인</button>
+          </form>
+
+          <!-- ✅ 결과 화면 (처음엔 숨김) -->
+          <section id="tsResultSection" class="tsResultWrap isHidden" aria-live="polite">
+            <div class="tsResultBox">
+              <p class="tsResultMsg">아이디 찾기 결과 입니다.</p>
+              <p class="tsResultId" id="tsFoundId">-</p>
+            </div>
+
+            <div class="tsActionGroup">
+              <a class="tsActionBtn tsActionBtnPrimary" href="/login" id="tsGoLogin">
+                로그인 하러 가기
+              </a>
+              <a class="tsActionBtn tsActionBtnGhost" href="/find_pw" id="tsGoResetPw">
+                비밀번호 재설정하기
+              </a>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 팝업 -->
+  <div id="tsPopupLayer" aria-hidden="true">
+    <div id="tsPopup" role="dialog" aria-modal="true" aria-labelledby="tsPopupText">
+      <p id="tsPopupText">-</p>
+      <button id="tsPopupBtn" type="button">확인</button>
+    </div>
+  </div>
+
+<script>
+  // ===== popup =====
+  const layer = document.getElementById("tsPopupLayer");
+  const textEl = document.getElementById("tsPopupText");
+  const btnEl  = document.getElementById("tsPopupBtn");
+
+  function openPopup(message){
+    textEl.textContent = message;
+    layer.style.display = "flex";
+    layer.setAttribute("aria-hidden","false");
+    btnEl.focus();
+  }
+  function closePopup(){
+    layer.style.display = "none";
+    layer.setAttribute("aria-hidden","true");
+  }
+  btnEl.addEventListener("click", closePopup);
+  window.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && layer.style.display === "flex") closePopup();
+  });
+
+  // ===== form / result =====
+  const form = document.getElementById("tsFindForm");
+  const nameEl  = document.getElementById("tsName");
+  const emailEl = document.getElementById("tsEmail");
+
+  const resultSection = document.getElementById("tsResultSection");
+  const foundIdEl = document.getElementById("tsFoundId");
+
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  const toStr = (v) => (v ?? "").toString().trim();
+
+  function showResult(foundId){
+    form.classList.add("isHidden");
+    resultSection.classList.remove("isHidden");
+    foundIdEl.textContent = foundId;
+  }
+
+  // 아주 가벼운 이메일 체크(원하면 더 빡세게 가능)
+  function looksLikeEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  async function requestFindId(name, email) {
+    // FastAPI Form(...) 이므로 form-urlencoded 로 전송
+    const body = new URLSearchParams({ name, email });
+
+    const res = await fetch("/get_id", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body,
+    });
+
+    // 서버가 4xx/5xx를 낼 수도 있으니 방어
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw new Error("서버 응답을 JSON으로 해석할 수 없습니다.");
+    }
+
+    // HTTP 자체가 실패면 우선 에러로 처리
+    if (!res.ok) {
+      const msg = data?.message || `요청 실패 (HTTP ${res.status})`;
+      throw new Error(msg);
+    }
+
+    return data; // {success: boolean, user_id? , message?}
+  }
+
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    const name  = toStr(nameEl.value);
+    const email = toStr(emailEl.value).toLowerCase();
+
+    if(!name){
+      return openPopup("이름 항목은\n필수 입력값입니다.");
+    }
+    if(!email){
+      return openPopup("이메일 항목은\n필수 입력값입니다.");
+    }
+    if(!looksLikeEmail(email)){
+      return openPopup("이메일 형식이 올바르지 않습니다.\n예) trendscope@naver.com");
+    }
+
+    // UI: 중복 제출 방지
+    submitBtn.disabled = true;
+    const prevText = submitBtn.textContent;
+    submitBtn.textContent = "조회 중...";
+
+    try {
+      const data = await requestFindId(name, email);
+
+      if (data.success) {
+        // main.py /get_id 성공 시 user_id 내려줌
+        showResult(data.user_id ?? "-");
+      } else {
+        openPopup(data.message || "입력하신 정보로 가입된 회원을 찾을 수 없습니다.");
+      }
+    } catch (err) {
+      openPopup(err?.message || "서버 통신 중 오류가 발생했습니다.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = prevText;
+    }
+  });
+</script>
+
+</body>
+</html>

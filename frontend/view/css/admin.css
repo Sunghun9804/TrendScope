@@ -1,0 +1,514 @@
+/* =========================================================
+   admin.css (관리자 수집 모니터링 전용)
+   - main_style.css 톤 유지 + 관리자 전용 컴포넌트
+   ========================================================= */
+
+/* 사이드바: "관리 메뉴" 타이틀 */
+.admin-side-title {
+  padding: 18px 18px 8px;
+  font-size: 14px;
+  font-weight: 1000;
+  color: #1d2b42;
+}
+
+/* ✅ 메뉴 옆에 체크박스(아이콘)처럼 뜨는 pseudo 제거 */
+.sidebar .menu li::before,
+.sidebar .menu li::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* divider */
+.sidebar .menu .menu-divider {
+  height: 1px;
+  margin: 10px 16px;
+  background: #e8eef8;
+  border-radius: 999px;
+  padding: 0 !important;
+}
+
+/* 관리자 툴바 */
+.admin-toolbar {
+  gap: 14px; /* main-toolbar 기본 gap 유지 + 안정 */
+}
+
+/* ✅ pill이 왼쪽에 더 붙도록(요청) */
+.admin-toolbar #runRatePill {
+  margin-right: auto; /* 나머지(날짜/조회) 오른쪽으로 */
+}
+
+/* 진행률 pill */
+.admin-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #a6c8ef;
+  background: #e8f1ff;
+  color: #0462D2;
+  font-size: 12px;
+  font-weight: 1000;
+  user-select: none;
+  cursor: default;
+}
+.admin-pill strong {
+  font-weight: 1100;
+}
+
+/* ✅ pill 내부 i(정보) 버튼 */
+.admin-pill__info{
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid #a6c8ef;
+  background: #ffffff;
+  color: #0462D2;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.admin-pill__info:hover{
+  background: #dcebff;
+}
+
+.admin-pill__info:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(4, 98, 210, 0.18);
+}
+
+
+/* 버튼 */
+.admin-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 1000;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  user-select: none;
+}
+.admin-btn--primary {
+  background: #0462D2;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(4, 98, 210, 0.18);
+}
+.admin-btn--primary:hover { background: #0356bd; }
+
+.admin-btn--ghost {
+  background: #e8f1ff;
+  color: #0462D2;
+  border: 1px solid #a6c8ef;
+}
+.admin-btn--ghost:hover { background: #dcebff; }
+
+/* 본문 패널 */
+.admin-panel {
+  width: 100%;
+  border: 1px solid #e8eef8;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.admin-panel-head {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #eef2fb;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.admin-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 1000;
+  color: #1d2b42;
+}
+.admin-sub {
+  font-size: 12px;
+  font-weight: 900;
+  color: #8a97ad;
+}
+
+/* 테이블 */
+.admin-table-wrap {
+  padding: 12px 12px 0;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 12px;
+  color: #24324a;
+}
+
+.admin-table thead th {
+  background: #f7f9fe;
+  border-top: 1px solid #eef2fb;
+  border-bottom: 1px solid #eef2fb;
+  padding: 12px 10px;
+  text-align: center;
+  font-weight: 1000;
+}
+
+.admin-table thead th:first-child { border-top-left-radius: 12px; }
+.admin-table thead th:last-child  { border-top-right-radius: 12px; }
+
+.admin-table--body td {
+  border-bottom: 1px solid #f0f4fb;
+  padding: 10px 10px;
+  text-align: center;
+  background: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-table--body td:last-child {
+  text-align: left;
+}
+
+.admin-table--body tr {
+  cursor: pointer;
+}
+.admin-table--body tr:hover td {
+  background: #f7fbff;
+}
+.admin-table--body tr.is-selected td {
+  background: #eef6ff;
+}
+
+/* 바디 스크롤 */
+.admin-table-body {
+  max-height: 520px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #eef2fb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+}
+
+/* 스크롤바 */
+.admin-table-body::-webkit-scrollbar { width: 10px; }
+.admin-table-body::-webkit-scrollbar-track {
+  background: #f1f4fb;
+  border-radius: 999px;
+}
+.admin-table-body::-webkit-scrollbar-thumb {
+  background: #c7d6f5;
+  border-radius: 999px;
+}
+.admin-table-body::-webkit-scrollbar-thumb:hover { background: #a9c2f2; }
+
+/* 상태코드 배지 */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 1000;
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color: #6a7a93;
+}
+.status-badge.is-4xx {
+  border-color: #ffd7a6;
+  background: #fff3e6;
+  color: #c77700;
+}
+.status-badge.is-5xx {
+  border-color: #ffb0b0;
+  background: #ffecec;
+  color: #d62020;
+}
+.status-badge.is-3xx {
+  border-color: #c7d6f5;
+  background: #eef6ff;
+  color: #0462D2;
+}
+
+/* 빈 상태 */
+.admin-empty {
+  padding: 18px 12px 14px;
+  text-align: center;
+  color: #8a97ad;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* =========================
+   Toast
+========================= */
+.admin-toast {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  width: 340px;
+  border-radius: 14px;
+  border: 1px solid #e8eef8;
+  background: #f8fbff;
+  box-shadow: 0 18px 45px rgba(15, 40, 90, 0.14);
+  z-index: 2100;
+}
+.admin-toast__icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 1000;
+  color: #0462D2;
+  background: #e8f1ff;
+  border: 1px solid #a6c8ef;
+  flex: 0 0 auto;
+}
+.admin-toast__text {
+  font-size: 12px;
+  font-weight: 900;
+  color: #6a7a93;
+  line-height: 1.5;
+  flex: 1 1 auto;
+}
+.admin-toast__close {
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  color: #6a7a93;
+  font-weight: 1000;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.admin-toast__close:hover { background: #f1f5fb; }
+
+/* ✅ hidden 우선 */
+[hidden] { display: none !important; }
+
+/* =========================
+   Infinite scroll loader
+========================= */
+.admin-infinite-loader{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  padding: 12px 0 6px;
+  color:#6a7a93;
+  font-size:12px;
+  font-weight:900;
+}
+
+.admin-spinner{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid #dfe8f7;
+  border-top-color:#0462D2;
+  animation: adminSpin 0.8s linear infinite;
+}
+@keyframes adminSpin { to { transform: rotate(360deg); } }
+
+/* 끝 상태에서는 스피너 숨김 */
+.admin-infinite-loader.is-done .admin-spinner { display: none; }
+
+/* =========================================================
+   ✅ detailModal: main 전체 덮기 + 딤 제거 + 카드 크게
+========================================================= */
+.mains{
+  position: relative;
+  overflow: hidden;
+}
+
+/* main 기준으로 전체 덮는 레이어 */
+.mains .admin-modal{
+  position: absolute;
+  inset: 0;
+  z-index: 2000;
+  display: block;
+  padding: 0;
+}
+
+/* ✅ 딤 제거(완전 투명) */
+.mains .admin-modal__backdrop{
+  position: absolute;
+  inset: 0;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* ✅ 카드: main 영역을 거의 꽉 채움 */
+.mains .admin-modal__card{
+  position: absolute;
+  inset: 12px;                /* 테두리 여백 */
+  width: auto;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid #dfe8f7;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 40, 90, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 모달 헤더 */
+.admin-modal__head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 14px;
+  border-bottom: 1px solid #eef2fb;
+}
+.admin-modal__left{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.admin-modal__title{
+  margin:0;
+  font-size: 14px;
+  font-weight: 1100;
+  color:#1d2b42;
+}
+.admin-modal__close{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  color: #6a7a93;
+  font-size: 18px;
+  font-weight: 1000;
+  cursor:pointer;
+}
+.admin-modal__close:hover { background: #f1f5fb; }
+
+/* meta chips */
+.admin-modal__meta{
+  padding: 10px 14px;
+  border-bottom: 1px solid #eef2fb;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-meta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color:#6a7a93;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* content */
+.admin-modal__content{
+  padding: 12px 14px 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.admin-modal__label{
+  font-size: 12px;
+  font-weight: 1000;
+  color:#1d2b42;
+}
+.admin-modal__pre{
+  margin:0;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e8eef8;
+  background:#fff;
+  font-size: 12px;
+  font-weight: 700;
+  color:#24324a;
+  line-height: 1.5;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   실행 확인 모달
+========================================================= */
+.admin-confirm{
+  position: absolute;
+  inset: 0;
+  z-index: 2200;
+  display: block;
+}
+.admin-confirm__backdrop{
+  position: absolute;
+  inset: 0;
+  background: transparent; /* dim 없이 카드만 */
+}
+.admin-confirm__card{
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100% - 32px));
+  border-radius: 16px;
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(15, 40, 90, 0.14);
+  padding: 18px 18px 16px;
+}
+.admin-confirm__title{
+  font-size: 14px;
+  font-weight: 1100;
+  color:#1d2b42;
+  margin-bottom: 10px;
+}
+.admin-confirm__desc{
+  font-size: 12px;
+  font-weight: 800;
+  color:#6a7a93;
+  line-height: 1.6;
+}
+.admin-confirm__actions{
+  margin-top: 16px;
+  display:flex;
+  justify-content: center;
+  gap: 12px;
+}
+/* ✅ 날짜/조회 영역(.admin-date-range)은 항상 오른쪽 고정 */
+.main-toolbar.admin-toolbar{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* runRatePill이 hidden이든 보이든, 날짜/조회는 오른쪽으로 */
+.main-toolbar.admin-toolbar .admin-date-range{
+  margin-left: auto !important;
+}
+
+/* 예전에 runRatePill에 margin-right:auto가 들어가 있었다면 무력화 */
+.main-toolbar.admin-toolbar #runRatePill{
+  margin-right: 0 !important;
+}

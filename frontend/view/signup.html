@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrendScope - 회원가입</title>
+  <link rel="stylesheet" href="/view/css/signup.css">
+</head>
+<body>
+
+<div id="tsJoinWrap">
+  <div id="tsShell">
+    <div id="tsLeft">
+      <div class="logo"><a href="/">TrendScope</a></div>
+      <p class="desc">
+        회원가입 후 로그인하면 TrendScope 기능을 이용할 수 있어요.
+      </p>
+      <div class="status">
+        <span class="dot"></span>
+        TrendScope
+      </div>
+    </div>
+
+    <div id="tsRight">
+      <div id="tsCard">
+        <div id="tsTitle">
+          <div class="h">회원가입</div>
+          <div class="s">필수 정보를 입력해 주세요.</div>
+        </div>
+
+        <form id="joinForm" action="/register" method="post">
+          <div class="tsField">
+            <div class="tsLabel">아이디 <span class="tsReq">필수</span></div>
+            <div class="tsRow2">
+              <div class="grow">
+                <input
+                        id="jId"
+                        name="user_id"
+                        class="tsInput"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="아이디를 입력해 주세요."
+                />
+              </div>
+              <button type="button" class="tsBtn" id="btnCheckId">중복확인</button>
+            </div>
+            <div class="tsHelp">아이디 중복확인을 완료해야 가입할 수 있습니다..</div>
+            <div class="tsMsg" id="idMsg"></div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">비밀번호 <span class="tsReq">필수</span></div>
+            <input
+                    id="jPw"
+                    name="pw"
+                    class="tsInput"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="비밀번호를 입력해 주세요."
+            />
+            <div class="tsHelp">규칙: 비밀번호는 영문 소문자와 숫자를 포함한 4~16자여야 합니다.</div>
+            <div class="tsMsg" id="pwRuleMsg"></div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">비밀번호 확인 <span class="tsReq">필수</span></div>
+            <input
+                    id="jPw2"
+                    name="pw_confirm"
+                    class="tsInput"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="비밀번호를 한 번 더 입력해 주세요."
+            />
+            <div class="tsMsg" id="pwMatchMsg"></div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">이름 <span class="tsReq">필수</span></div>
+            <input id="jName" name="name" class="tsInput" type="text" autocomplete="name" placeholder="이름" />
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">성별 <span class="tsReq">필수</span></div>
+            <div class="tsRadioWrap" role="radiogroup" aria-label="성별">
+              <label><input type="radio" name="gender" value="남" required> 남</label>
+              <label><input type="radio" name="gender" value="여"> 여</label>
+            </div>
+            <div class="tsHelp">성별은 반드시 선택해야 가입할 수 있습니다.</div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">생년월일 <span class="tsReq">필수</span></div>
+            <input id="jBirth" name="birthday" class="tsInput" type="date" autocomplete="bday" required />
+            <div class="tsHelp">미래 날짜는 선택할 수 없게 제한됩니다.</div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">휴대전화</div>
+            <input
+                    id="jPhone"
+                    name="phone"
+                    class="tsInput"
+                    type="tel"
+                    autocomplete="tel"
+                    placeholder="예: 01012345678 (선택, 숫자만)"
+            />
+            <div class="tsHelp">입력하지 않아도 가입 가능 (입력 시 숫자 10~11자리)</div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">이메일 <span class="tsReq">필수</span></div>
+            <input
+                    id="jEmail"
+                    name="email"
+                    class="tsInput"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="예: hello@trendscope.com"
+            />
+            <div class="tsHelp">이메일 형식으로 입력해 주세요. (예: hello@trendscope.com)</div>
+          </div>
+
+          <div class="tsField">
+            <div class="tsLabel">경제지식수준</div>
+            <div class="tsRadioWrap" role="radiogroup" aria-label="경제지식수준">
+              <label><input type="radio" name="eco_state" value="상"> 상</label>
+              <label><input type="radio" name="eco_state" value="중상"> 중상</label>
+              <label><input type="radio" name="eco_state" value="중"> 중</label>
+              <label><input type="radio" name="eco_state" value="중하"> 중하</label>
+              <label><input type="radio" name="eco_state" value="하"> 하</label>
+            </div>
+            <div class="tsHelp">선택 입력 (가입 필수 아님)</div>
+          </div>
+
+          <div class="tsMsg" id="formErr"></div>
+
+          <div class="tsActions">
+            <a href="/">취소</a>
+            <button class="tsBtnPrimary" id="btnJoin" type="submit" disabled>가입하기</button>
+          </div>
+        </form>
+
+        <div id="tsFoot">
+          <a class="tsLinkBlue" href="/login">이미 계정이 있어요 → 로그인</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!--  2-1: 사용 가능한 아이디 -->
+<div id="tsAvailLayer" class="tsLayer" aria-hidden="true">
+  <div class="tsModal" role="dialog" aria-modal="true" aria-labelledby="tsAvailText">
+    <p id="tsAvailText" class="tsModalText">사용 가능한 아이디 입니다.</p>
+    <button id="tsAvailBtn" class="tsModalBtn" type="button">확인</button>
+  </div>
+</div>
+
+<!--  2-2: 이미 사용중인 아이디 -->
+<div id="tsDupLayer" class="tsLayer" aria-hidden="true">
+  <div class="tsModal" role="dialog" aria-modal="true" aria-labelledby="tsDupText">
+    <p id="tsDupText" class="tsModalText">이미 사용중인 아이디 입니다.</p>
+    <button id="tsDupBtn" class="tsModalBtn" type="button">확인</button>
+  </div>
+</div>
+
+<!--  4-1: 가입하시겠습니까? -->
+<div id="tsJoinAskLayer" class="tsLayer" aria-hidden="true">
+  <div class="tsModal" role="dialog" aria-modal="true" aria-labelledby="tsJoinAskText">
+    <p id="tsJoinAskText" class="tsModalText">가입하시겠습니까?</p>
+    <button id="tsJoinAskBtn" class="tsModalBtn" type="button">확인</button>
+  </div>
+</div>
+
+<script src="/static/signup.js"></script>
+</body>
+</html>

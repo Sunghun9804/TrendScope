@@ -1,0 +1,2196 @@
+/* mains은 기존 my_page_style.css 위에 덮어씌우는 전용 스타일 */
+.mains {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+  align-items: stretch;
+  --content-pad: 14px;
+}
+
+.main-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* flex 스크롤 필수 패턴 */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-top: 14px;
+  box-sizing: border-box;
+  scrollbar-gutter: stable;
+}
+
+.main-scroll::-webkit-scrollbar {
+  width: 10px;
+  /* 세로 스크롤 두께 */
+}
+
+.main-scroll::-webkit-scrollbar-track {
+  background: #f1f4fb;
+  /* 트랙 배경 */
+  border-radius: 999px;
+}
+
+.main-scroll::-webkit-scrollbar-thumb {
+  background: #c7d6f5;
+  /* 썸(움직이는 바) */
+  border-radius: 999px;
+  border: 0;
+}
+
+.main-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a9c2f2;
+  /* 호버 색 */
+}
+
+.main-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.main1-panel {
+  height: auto;
+  width: 100%;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 상단 툴바 ===== */
+.main-toolbar {
+  width: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: #f1f5fb;
+  border-bottom: 1px solid #e6edf8;
+  border-radius: 14px;
+}
+
+#main2,
+#main3 {
+  scroll-margin-top: 90px;
+  /* 툴바 높이에 맞춰 조절 */
+}
+
+.toolbar-right {
+  margin-left: auto;
+}
+
+.date-range {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #dfe8f7;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 40, 90, 0.06);
+  padding-right: 2px;
+}
+
+.date-icon {
+  font-size: 14px;
+}
+
+.date-label {
+  font-size: 12px;
+  color: #6a7a93;
+  font-weight: 600;
+}
+
+.mains .date-pill input[type="date"] {
+  width: auto;
+  /* my_page_style.css에서 100%로 되어있어서 덮음 */
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  color: #24324a;
+  outline: none;
+}
+
+/* date-pill 안에 오른쪽 아이콘 얹기 위해 */
+.date-pill{
+  position: relative; /* 크기 변화 없음 */
+}
+
+/*  기본 달력 indicator(브라우저 아이콘) 숨김 */
+.date-pill input[type="date"]::-webkit-calendar-picker-indicator{
+  opacity: 0;            /* 안 보이게 */
+  cursor: pointer;       /* 클릭 영역은 살아있게(원하면) */
+}
+
+/*  오른쪽 끝에 📅 오버레이 */
+.date-pill .date-icon-right{
+  position: absolute;
+  right: 7px;           /* date-pill padding이 12px라 딱 맞춤 */
+  top: 48%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  line-height: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/*  아이콘이 input 텍스트랑 겹치지 않게: input 오른쪽만 살짝 여유 */
+.date-pill input[type="date"]{
+  padding-left: 0;
+  text-align: center;
+}
+
+/* date 날짜 폰트 스타일 */
+.mains .date-pill input[type="date"]::-webkit-datetime-edit {
+  font-family: "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #24324a;
+  text-align: center;
+  width: 100%;
+}
+
+
+/* ===== 세그먼트 버튼 ===== */
+.segmented {
+  margin-left: 0;
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #dfe8f7;
+  box-shadow: 0 6px 16px rgba(15, 40, 90, 0.06);
+}
+
+.seg-btn {
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6a7a93;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.seg-btn:hover {
+  background: #f3f7ff;
+  color: #2a4f98;
+}
+
+.seg-btn.is-active {
+  background: #e8f1ff;
+  color: #0462D2;
+  box-shadow: inset 0 0 0 1px #a6c8ef;
+}
+
+.cselect {
+  position: relative;
+  width: 180px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.cselect.cselect--sm {
+  width: 150px;
+  /* 필요하면 120~180 조절 */
+}
+
+.cselect.cselect--sm .cselect__btn {
+  height: 34px;
+  /* 기존 ts2-select 높이 */
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.cselect.cselect--sm .cselect__opt {
+  font-size: 12px;
+  padding: 9px 10px;
+}
+
+.cselect__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  color: #24324a;
+  box-shadow: 0 6px 16px rgba(15, 40, 90, 0.06);
+  cursor: pointer;
+}
+
+.cselect__btn:focus {
+  outline: none;
+  border-color: #a6c8ef;
+  box-shadow: 0 0 0 3px rgba(4, 98, 210, 0.12);
+}
+
+.cselect__caret {
+  color: #6a7a93;
+}
+
+.cselect__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid #dfe8f7;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(15, 40, 90, 0.14);
+  display: none;
+  z-index: 50;
+}
+
+.cselect.is-open .cselect__list {
+  display: block;
+}
+
+.cselect__opt {
+  padding: 10px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #24324a;
+  cursor: pointer;
+}
+
+.cselect__opt:hover {
+  background: #e8f1ff;
+  color: #0462D2;
+}
+
+.cselect__opt.is-selected {
+  background: #1b66d1;
+  color: #fff;
+}
+
+/* ===== 본문 레이아웃 ===== */
+.main1-body {
+  align-items: stretch;
+  flex: 0 0 auto;
+  min-height: 0;
+  display: flex;
+  gap: 18px;
+  padding: 5px 14px 0px;
+  overflow: visible;
+}
+
+/* ===== 랭킹 영역 ===== */
+.ranking {
+  flex: 1 1 auto;
+  min-width: 520px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 12px 4px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #1d2b42;
+}
+
+.pill {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0462D2;
+  background: #e8f1ff;
+  border: 1px solid #a6c8ef;
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+
+/* “표” 대신 div grid 형태로 (스크린샷 느낌) */
+.rank-table {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e8eef8;
+  border-radius: 14px;
+  overflow: visible;
+  background: #ffffff;
+}
+
+/* ===== 증감률/변동 안내 줄 ===== */
+.section-head-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-note {
+  margin-left: auto;
+}
+
+.rate-move-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  /* tooltip 기준점 */
+  font-size: 12px;
+  color: #8a97ad;
+}
+
+.info-btn {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid #c7d6f5;
+  background: #fff;
+  color: #0462D2;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.info-btn:hover {
+  background: #e8f1ff;
+  border-color: #a6c8ef;
+}
+
+/* 툴팁 */
+.tooltip {
+  max-width: min(320px, calc(100vw - 24px));
+  position: absolute;
+  right: -4px;
+  top: calc(100% + 8px);
+  width: 320px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #dfe8f7;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(15, 40, 90, 0.14);
+  color: #24324a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  z-index: 9999;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  right: auto;
+  left: var(--arrow-left, 12px);
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-left: 1px solid #dfe8f7;
+  border-top: 1px solid #dfe8f7;
+  transform: rotate(45deg);
+}
+
+/* ✅ tooltip 화살표를 i(18px) 가운데로 정렬 */
+.rank-head .has-tip .tooltip::before,
+.rate-move-note .tooltip::before {
+  --info-btn: 20px;
+  /* info-btn 크기 */
+  --arrow: 10px;
+  /* 화살표(사각형) 크기 */
+
+  width: var(--arrow);
+  height: var(--arrow);
+
+  /* i 가운데로 보정 */
+  right: calc((var(--info-btn) / 1) - (var(--arrow) / 2));
+
+  /* 세로도 살짝 더 자연스럽게(취향) */
+  top: calc(-1 * (var(--arrow) / 2));
+}
+
+.rank-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 0;
+}
+
+.rank-head {
+  background: #f5f8ff;
+  color: #6a7a93;
+  font-size: 13px;
+  font-weight: 900;
+  border-bottom: 1px solid #e8eef8;
+}
+
+.rank-head .has-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rank-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f3fa;
+  transition: 0.15s;
+}
+
+.rank-item:hover {
+  background: #f7fbff;
+}
+
+.rank-item.is-selected {
+  background: #eaf3ff;
+  box-shadow: inset 0 0 0 1px #b8d6ff;
+}
+
+/* 공통 패딩 변수 */
+.rank-table {
+  --rank-pad-x: 12px;
+}
+
+/* 모든 row는 같은 grid + 같은 좌우 padding */
+.rank-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr 1fr 1fr 1fr;
+  align-items: center;
+  padding-left: var(--rank-pad-x);
+  padding-right: var(--rank-pad-x);
+  box-sizing: border-box;
+}
+
+/* 헤더/아이템은 위아래 패딩만 다르게 */
+.rank-head {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 14px 14px 0 0;
+}
+
+.rank-item {
+  padding-top: 13px;
+  padding-bottom: 13px;
+  padding-left: var(--rank-pad-x);
+  /* 혹시 기존 padding 남아있으면 덮어쓰기 */
+  padding-right: var(--rank-pad-x);
+}
+
+.c-rank {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rank-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+  color: #0462D2;
+  background: #e8f1ff;
+  border: 1px solid #a6c8ef;
+  padding-bottom: 3px;
+}
+
+.c-keyword {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1d2b42;
+}
+
+.c-count,
+.c-rate,
+.c-move {
+  font-size: 13px;
+  font-weight: 800;
+  color: #24324a;
+}
+
+.c-rate.is-up {
+  color: #e53935;
+}
+
+.c-rate.is-down {
+  color: #1e63ff;
+}
+
+.c-rate.is-flat {
+  color: #6a7a93;
+}
+
+.c-move.is-new {
+  color: #18a567;
+  background: #e9fbf2;
+  border: 1px solid #bfead3;
+}
+
+/* 공통: move 컬럼 정렬 */
+.rank-row .c-move {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* NEW 뱃지: 크기 고정(텍스트/패딩/높이) */
+.rank-row .c-move.is-new {
+  display: inline-flex;
+  /* ⭐ block으로 늘어나는 것 방지 */
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  /* ⭐ 내용만큼만 */
+  white-space: nowrap;
+
+  font-size: 12px;
+  /* ⭐ 상속 영향 차단 */
+  font-weight: 800;
+  line-height: 1;
+  /* ⭐ 세로로 커지는 거 방지 */
+  padding: 4px 10px;
+  height: 25px;
+  /* ⭐ 높이 고정 */
+  border-radius: 999px;
+}
+
+.c-move.is-up {
+  color: #e53935;
+  font-weight: 900;
+}
+
+.c-move.is-down {
+  color: #1e63ff;
+  font-weight: 900;
+}
+
+/* ✅ 헤더: "증감률/변동" 텍스트를 컬럼 정중앙에 고정 + i는 오른쪽에 */
+.rank-head .has-tip {
+  --info: 18px;
+  /* info-btn 크기 */
+  --arrow: 15px;
+  /* 툴팁 화살표(사각형) 크기 */
+  --gap: 6px;
+  /* 텍스트-아이콘 간격 */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+/* 왼쪽에 아이콘 폭만큼 "투명 스페이서"를 만들어서 좌우 밸런스 맞추기 */
+.rank-head .has-tip::before {
+  content: "";
+  width: var(--info);
+  flex: 0 0 var(--info);
+  height: 0;
+  /* 줄 높이 영향 최소화 */
+}
+
+/* 아이콘 폭 고정(혹시 줄어드는 것 방지) */
+.rank-head .has-tip .info-btn {
+  width: var(--info);
+  height: var(--info);
+  flex: 0 0 var(--info);
+}
+
+
+/* ✅ 랭킹 표: 키워드(2열)만 left, 나머지 컬럼은 '컬럼폭 기준' 정중앙 */
+.rank-row {
+  justify-items: stretch;
+  /* 자식(각 칸)을 컬럼폭만큼 늘림 */
+}
+
+.rank-row>* {
+  min-width: 0;
+  display: flex;
+  /* 칸 내부 정렬을 확실하게 */
+  align-items: center;
+}
+
+/* 2열(키워드)만 왼쪽 */
+.rank-row> :nth-child(2) {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* 나머지(1,3,4,5열)는 가운데 */
+.rank-row> :not(:nth-child(2)) {
+  justify-content: center;
+  text-align: center;
+}
+
+/* NEW 뱃지도 가운데 유지 */
+.rank-row .c-move.is-new {
+  justify-self: center;
+}
+
+/* ===== 요약 패널 ===== */
+.summary {
+  width: 420px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.highlight-blue {
+  color: #0462d2;
+  font-weight: 700; 
+}
+
+
+.summary p {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #8a97ad;
+  margin: 0;
+  padding: 12px 4px 5px;
+}
+
+.summary-card {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e8eef8;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0px;
+}
+
+.summary-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-bottom: 1px solid #eef2fb;
+}
+
+.summary-title .tag {
+  font-size: 12px;
+  font-weight: 900;
+  color: #0462D2;
+  background: #e8f1ff;
+  border: 1px solid #a6c8ef;
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+
+.summary-title strong {
+  font-size: 14px;
+  font-weight: 900;
+  color: #1d2b42;
+}
+
+.summary-subhead {
+  display: none;
+  font-size: 13px;
+  font-weight: 900;
+  color: #0462d2;
+  margin-bottom: 10px;
+}
+
+.summary-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #2c3a52;
+  font-size: 13px;
+  line-height: 1.6
+}
+
+.summaryary-content {
+  padding: 14px 18px;   /* 위아래 / 좌우 */
+  box-sizing: border-box;
+}
+
+/* 선정이유(요약패널) 리스트 정리 */
+#summaryList{
+  margin: 8px 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  counter-reset: tsReason;
+}
+
+#summaryList > li{
+  margin: 2px;
+  padding-left: 17px;
+  padding-bottom: 0;
+  position: relative;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #2c3a52;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 자동 번호 */
+/* #summaryList > li::before{
+  display: none;
+  content: counter(tsReason) ".";
+  counter-increment: tsReason;
+  position: absolute;
+  left: 5px;
+  top: 0.1;
+  font-weight: 900;
+  color: #0462d2;
+} */
+
+
+
+/* ===== TS2 기사 요약 박스 ===== */
+.ts2-sumbox {
+  position: relative;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid #e8eef8;
+  border-radius: 10px;
+  background: #f9fbff;
+  animation: ts2SlideDown 0.18s ease-out;
+  overflow: hidden;
+}
+
+@keyframes ts2SlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   TS2 요약
+   =============================== */
+
+/* 요약 박스(기본) */
+.ts2-sumbox {
+  position: relative;
+  margin-top: 6px;
+  padding: 6px 10px;          /* ⭐ 위아래 여백 줄임 */
+  border: 1px solid #e8eef8;
+  border-radius: 10px;
+  background: #f9fbff;
+  overflow: hidden;
+}
+
+/* 회원 요약(잠금 아님) 더 얇게 */
+.ts2-sumbox:not(.is-locked) {
+  padding-top: 4px;           /* ⭐ 위 */
+  padding-bottom: 4px;        /* ⭐ 아래 */
+}
+
+/* 요약 UI 기본 텍스트 */
+.ts2-sumui {
+  font-size: 13.3px;
+  line-height: 1.35;          /* ⭐ 줄간격 압축 */
+  color: #2c3a52;
+}
+
+/* 섹션 자체 여백 제거 */
+.ts2-sumsection {
+  margin: 0;
+  padding: 0;
+}
+
+/* 섹션 사이 간격 최소화 + 구분선 */
+.ts2-sumsection + .ts2-sumsection {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #eef2fb;
+}
+
+/* 헤더(핵심 주장/근거) 여백 최소화 */
+.ts2-sumhead {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.3px;
+  font-weight: 900;
+  color: #0462d2;
+  margin: 0 0 -2px 4px;          /* ⭐ 아래만 2px */
+  margin-top: 7px; 
+}
+
+/* 헤더 점 더 작게 */
+.ts2-sumhead::before {
+  display: none;
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #0462d2;
+  box-shadow: none;
+}
+
+/* UL 기본 margin 제거(브라우저 기본값 제거 핵심) */
+.ts2-sumlist {
+  margin-bottom: 13px !important; 
+  margin-top:8px;
+  padding-left: 19px;
+  line-height: 1.32;
+}
+
+/* LI 여백 제거(여기서 대부분 커짐) */
+.ts2-sumlist li {
+  margin: 3px !important;       /* ⭐ 강제 */
+  padding: 0;
+}
+
+/* plain 텍스트 fallback */
+.ts2-sumplain {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #2c3a52;
+  white-space: pre-line;
+}
+
+/* ===== 비회원 잠금 상태 ===== */
+.ts2-sumbox.is-locked .ts2-sumui {
+  filter: blur(6px);
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
+}
+
+
+/* 비로그인 오버레이 */
+.ts2-sumoverlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: transparent ;
+  backdrop-filter: blur(1px);
+}
+
+.ts2-sumbox.is-locked .ts2-sumoverlay {
+  display: flex;
+}
+
+/* ===== 오버레이 문구 ===== */
+.ts2-sumoverlay__msg {
+  background: none;  
+  border: none;        
+  border-radius: 0;
+  padding: 0;
+  font-size: 13px;
+  transform: translateY(-8px);
+  font-weight: 800;
+  line-height: 1.6;
+  color: #0462D2;
+  text-align: center;
+  cursor: pointer;
+  white-space: pre-line;
+}
+
+
+.ts2-sumoverlay__msg:hover,
+.ts2-sumoverlay__msg:focus,
+.ts2-sumoverlay__msg:active {
+  background: transparent !important;
+  outline: none;
+  text-decoration: underline;
+}
+
+.ts2-sumtext {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #2c3a52;
+  white-space: pre-line;
+}
+
+/* ===== 잠금 상태 높이 제한 ===== */
+.ts2-sumbox.is-locked {
+  max-height: 90px;
+}
+
+
+/* 카드 전체 폰트/기본 텍스트 안정화 */
+.ts2-card {
+  font-family: "Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+
+/* 제목 */
+.ts2-title {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
+  color: #1f2a44;
+  margin-top: 8px;
+}
+
+/* meta 줄 정렬 */
+.ts2-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ts2-meta { position: relative; z-index: 10; }
+.ts2-sumoverlay { pointer-events: none; }
+.ts2-sumbox.is-locked .ts2-sumoverlay { pointer-events: auto; }
+.ts2-card__top { position: relative; z-index: 20; }
+.js-ts2-toggle { position: relative; z-index: 30; pointer-events: auto; }
+
+
+
+/* ===================== TS2: MAIN2 (기사 3열) ===================== */
+.ts2-panel {
+  margin-top: 18px;
+  scroll-margin-top: 14px;
+  /* 앵커 이동시 살짝 여유 */
+  padding-left: var(--content-pad);
+  padding-right: var(--content-pad);
+  box-sizing: border-box;
+}
+
+.ts2-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 컬럼 패널 */
+.ts2-col {
+  border: 1px solid #e8eef8;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts2-colhead {
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #ffffff;
+}
+
+.ts2-coltitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ts2-h {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #1d2b42;
+}
+
+.ts2-pill {
+  font-size: 12px;
+  font-weight: 900;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color: #6a7a93;
+}
+
+.ts2-pill--pos {
+  background: #e8f1ff;
+  border-color: #a6c8ef;
+  color: #0462D2;
+}
+
+.ts2-pill--neu {
+  background: #f5f8ff;
+  border-color: #dfe8f7;
+  color: #6a7a93;
+}
+
+.ts2-pill--neg {
+  background: #ffecec;
+  border-color: #ffb9b9;
+  color: #e53935;
+}
+
+.ts2-colbody {
+  border-top: 1px solid #eef2fb;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+/* 카드 */
+.ts2-card {
+  border: 1px solid #e8eef8;
+  border-radius: 14px;
+  background: #fff;
+  padding: 12px;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.ts2-card:hover {
+  background: #f7fbff;
+}
+
+.ts2-card.is-open {
+  background: #eaf3ff;
+  box-shadow: inset 0 0 0 1px #b8d6ff;
+}
+
+.ts2-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ts2-src {
+  font-size: 12px;
+  font-weight: 900;
+  color: #2c3a52;
+  background: #f5f8ff;
+  border: 1px solid #dfe8f7;
+  padding: 4px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ts2-src__logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #dfe8f7;
+}
+
+/* ✅ 로고만 보여주는 모드 */
+.ts2-src.ts2-src--logoonly {
+  padding: 0 6px;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #dfe8f7;
+  /* 크기는 취향대로 */
+  width: 86px;
+  height: 30px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* ✅ 컨테이너를 "꽉" 채우는 로고 */
+.ts2-src.ts2-src--logoonly .ts2-src__logo {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  /* 로고를 완전히 꽉 채우고 싶으면 cover (잘릴 수 있음) */
+  object-fit: contain;
+  /* 로고가 안 잘리게 넣고 싶으면 contain (여백 생길 수 있음) */
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  display: block;
+}
+
+/* 이제 이름 안 쓰니까 이건 없어도 됨 */
+.ts2-src__name {
+  display: none;
+}
+
+.ts2-mini {
+  font-size: 12px;
+  font-weight: 900;
+  color: #6a7a93;
+  background: #f5f8ff;
+  border: 1px solid #dfe8f7;
+  padding: 4px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ts2-title {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #1d2b42;
+  line-height: 1.35;
+}
+
+.ts2-title {
+  padding-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  line-height: 1.2;
+  min-height: calc(1.2em * 2);
+}
+
+
+.ts2-desc {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #2c3a52;
+  line-height: 1.6;
+  display: none;
+  /* 기본은 접힘 */
+}
+
+.ts2-card.is-open .ts2-desc {
+  display: block;
+}
+
+/* 줄바꿈 금지 */
+.ts2-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  min-width: 0;
+  margin-left: -3px;
+}
+
+/* 언론사 로고 작아지지 않게 고정 */
+.ts2-card__top .ts2-src {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+}
+
+/* 로고 정확한 사이즈 유지(원래 설정한 값) */
+.ts2-card__top .ts2-src.ts2-src--logoonly {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  width: 86px;
+  height: 30px;
+}
+
+/* 신뢰도/날짜/기사요약 알약들 */
+.ts2-meta .ts2-chip {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  height: 26px;
+  padding: 0 8px;
+  font-size: 11px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 버튼(기사요약)은 기본 버튼 영향 제거 */
+.ts2-meta .ts2-chip--btn {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.ts2-chip {
+  font-size: 12px;
+  font-weight: 900;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color: #6a7a93;
+}
+
+.ts2-chip--date {
+  background: #ffffff;
+  color: #8a97ad;
+}
+
+.ts2-chip--btn {
+  background: #e8f1ff;
+  border-color: #a6c8ef;
+  color: #0462D2;
+  cursor: pointer;
+}
+
+/* ===== 신뢰도(Trust) 뱃지 컬러 ===== */
+.ts2-chip--trust {
+  /* 기본값(혹시 cls 없을 때) */
+  background: #f5f8ff;
+  border-color: #dfe8f7;
+  color: #6a7a93;
+}
+
+/* 높음(>=0.70) */
+.ts2-chip--trust.is-ok {
+  background: #e9fbf2;
+  border-color: #bfead3;
+  color: #18a567;
+}
+
+/* 중간(>=0.40) */
+.ts2-chip--trust.is-warn {
+  background: #fff7e6;
+  border-color: #ffd89e;
+  color: #b86b00;
+}
+
+/* 낮음(<0.40) */
+.ts2-chip--trust.is-risk {
+  background: #ffecec;
+  border-color: #ffb9b9;
+  color: #e53935;
+}
+
+/* 하단 페이지네이션 */
+.ts2-pager {
+  padding: 10px 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #6a7a93;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.ts2-pagebtn {
+  border: none;
+  background: transparent;
+  color: #6a7a93;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.ts2-pagebtn:hover {
+  background: #f1f5fb;
+}
+
+/* =========================
+   TS2 높이 고정(기사 수 무관)
+========================= */
+
+/* 1) 컬럼 높이 고정값(원하는대로 조절) */
+:root {
+  --ts2-col-h: clamp(560px, 62vh, 760px);
+}
+
+/* 2) grid 아이템 높이도 늘려서(하단 pager 라인 맞추기) */
+.ts2-grid {
+  align-items: stretch;
+  /* 기존 start -> stretch */
+}
+
+/* 3) 컬럼 패널 자체 높이 고정 */
+.ts2-col {
+  height: var(--ts2-col-h);
+}
+
+/* 4) 헤더는 고정, 바디가 남은 높이를 먹게 */
+.ts2-colhead {
+  flex: 0 0 auto;
+}
+
+.ts2-colbody {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* ✅ flex 스크롤 필수 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 5) 리스트가 남은 영역을 먹고, 항상 내부 스크롤(넘칠 때만 스크롤바) */
+.ts2-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  padding-right: 6px;
+}
+
+/* =========================
+   TS2 리스트 스크롤바 스킨(항상 적용)
+========================= */
+
+/* Firefox */
+.ts2-list {
+  scrollbar-width: auto;
+  scrollbar-color: #c7d6f5 #f1f4fb;
+  scrollbar-gutter: stable;
+}
+
+/* Chrome / Edge / Safari */
+.ts2-list::-webkit-scrollbar {
+  width: 15px;
+}
+
+.ts2-list::-webkit-scrollbar-track {
+  background: #f1f4fb;
+  border-radius: 999px;
+}
+
+.ts2-list::-webkit-scrollbar-thumb {
+  background: #c7d6f5;
+  border-radius: 999px;
+  border: 0;
+}
+
+.ts2-list::-webkit-scrollbar-thumb:hover {
+  background: #a9c2f2;
+}
+
+.ts2-list::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===================== /TS2 ===================== */
+/* ===================== TS3: MAIN3 (키워드 언급량 및 감성분석) ===================== */
+.ts3-panel {
+  margin-top: 18px;
+  padding-left: var(--content-pad);
+  padding-right: var(--content-pad);
+  box-sizing: border-box;
+}
+
+.ts3-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ts3-card {
+  border: 1px solid #e8eef8;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts3-card--wide {
+  grid-column: 1 / -1;
+}
+
+.ts3-head {
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #eef2fb;
+}
+
+.ts3-head--wide {
+  align-items: flex-start;
+}
+
+.ts3-head--space {
+  align-items: flex-start;
+}
+
+.ts3-head-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ts3-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #1d2b42;
+}
+
+.ts3-tag {
+  font-size: 12px;
+  font-weight: 900;
+  color: #0462D2;
+  background: #e8f1ff;
+  border: 1px solid #a6c8ef;
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.ts3-klist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 6px;
+}
+
+.ts3-kbtn {
+  border: 1px solid #dfe8f7;
+  background: #f5f8ff;
+  color: #6a7a93;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.ts3-kbtn:hover {
+  background: #e8f1ff;
+  color: #0462D2;
+  border-color: #a6c8ef;
+}
+
+.ts3-kbtn.is-active {
+  background: #e8f1ff;
+  color: #0462D2;
+  border-color: #a6c8ef;
+  box-shadow: inset 0 0 0 1px #a6c8ef;
+}
+
+.ts3-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 상단 큰 그래프 자리 */
+.ts3-chartbox {
+  height: 330px;
+  border: 1px solid #eef2fb;
+  border-radius: 12px;
+  background: linear-gradient(#ffffff, #ffffff) padding-box, repeating-linear-gradient(0deg, rgba(15, 40, 90, 0.06) 0 1px, transparent 1px 44px), repeating-linear-gradient(90deg, rgba(15, 40, 90, 0.04) 0 1px, transparent 1px 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ts3-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #8a97ad;
+  font-weight: 900;
+  font-size: 12px;
+  gap: 6px;
+}
+
+.ts3-placeholder small {
+  font-weight: 800;
+  opacity: .8;
+}
+
+.ts3-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 워드클라우드 자리 */
+.ts3-cloud {
+  height: 220px;
+  border: 1px solid #eef2fb;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+}
+
+.ts3-cloud-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-content: center;
+  justify-content: center;
+}
+
+.ts3-w {
+  font-weight: 900;
+  color: var(--c, #6a7a93);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ts3-w.lg {
+  font-size: 40px;
+  color: #6b6b6b;
+}
+
+.ts3-w.md {
+  font-size: 26px;
+}
+
+.ts3-w.sm {
+  font-size: 16px;
+  opacity: .9;
+}
+
+/* 도넛 자리 */
+.ts3-donutwrap {
+  padding: 20px 16px 10px;
+  height: 220px;
+  border: 1px solid #eef2fb;
+  border-radius: 12px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.ts3-donut {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(#1e63ff 0 40%, #8a97ad 40% 70%, #e53935 70% 100%);
+  position: relative;
+}
+
+.ts3-donut::after {
+  content: "";
+  position: absolute;
+  inset: 46px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #eef2fb;
+}
+
+/* 범례 */
+.ts3-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6a7a93;
+  font-weight: 900;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.ts3-leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ts3-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.ts3-dot--pos {
+  background: #0073ff;
+}
+
+.ts3-dot--neu {
+  background: #e6e6e6;
+}
+
+.ts3-dot--neg {
+  background: #ff0000;
+}
+
+/* ===================== /TS3 ===================== */
+/* 바깥(페이지) 스크롤 제거: 이중 스크롤 방지 */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* 헤더 아래 영역을 정확히 화면 높이로 고정 */
+.app {
+  height: calc(100vh - 60px);
+  min-height: 0;
+  overflow: hidden;
+  /* 앱 밖으로 스크롤 안 새게 */
+}
+
+/* 사이드바도 같은 높이로 */
+.sidebar {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  /* 메뉴 길면 사이드바만 스크롤 */
+}
+
+/* main도 app 높이에 맞추고 내부에서만 스크롤 */
+.mains {
+  height: 100%;
+  min-height: 0;
+  /* 기존에 mains에 height: calc(100vh - 70px) 있으면 지워도 됨 */
+}
+
+.main-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* 끝에서 바깥으로 스크롤 튀는 거 방지 */
+}
+
+/* ✅ 로그인 필요 모달 */
+.tsNeedLoginLayer {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  background: rgba(15, 23, 42, 0.12);
+  padding: 24px;
+}
+
+.tsNeedLoginLayer.is-open {
+  display: flex;
+}
+
+.tsNeedLoginModal {
+  width: min(520px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .18);
+  padding: 26px 22px 20px;
+  border: 1px solid rgba(15, 23, 42, .06);
+  text-align: center;
+}
+
+.tsNeedLoginTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #1d2b42;
+}
+
+.tsNeedLoginDesc {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6a7a93;
+  font-weight: 700;
+}
+
+.tsNeedLoginBtns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tsNeedLoginBtn {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.tsNeedLoginBtn--ghost {
+  background: #fff;
+  color: #24324a;
+  border-color: #dfe8f7;
+}
+
+.tsNeedLoginBtn--ghost:hover {
+  background: #f5f8ff;
+}
+
+.tsNeedLoginBtn--primary {
+  background: #0462D2;
+  color: #fff;
+}
+
+.tsNeedLoginBtn--primary:hover {
+  filter: brightness(0.98);
+}
+
+/* ===== TS3 도넛 퍼센트 라벨 ===== */
+#ts3Donut {
+  position: relative;
+}
+
+#ts3Donut .ts3-donut-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#ts3Donut .ts3-donut-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1d2b42;
+  white-space: nowrap;
+}
+
+/* =====================
+   TS2 기사 상세 모달
+===================== */
+#ts2ModalRoot {
+  position: relative;
+}
+
+#ts2ModalRoot .ts2m-backdrop[hidden] {
+  display: none !important;
+}
+
+#ts2ModalRoot .ts2m-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+#ts2ModalRoot .ts2m-panel {
+  width: min(850px, 90vw);   /* 가로 */
+  height: min(850px, 90vh);  /* 세로 */
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#ts2ModalRoot .ts2m-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6a7a93;
+}
+
+#ts2ModalRoot .ts2m-close:hover {
+  background: #f1f5fb;
+}
+
+#ts2ModalRoot .ts2m-head {
+  padding: 18px 22px 12px;
+  border-bottom: 1px solid #eef2fb;
+}
+
+#ts2ModalRoot .ts2m-press {
+  font-size: 12px;
+  font-weight: 900;
+  color: #0462D2;
+  margin-bottom: 6px;
+}
+
+#ts2ModalRoot .ts2m-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #1d2b42;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+#ts2ModalRoot .ts2m-meta {
+  font-size: 12px;
+  font-weight: 800;
+  color: #8a97ad;
+}
+
+#ts2ModalRoot .ts2m-body {
+  padding: 18px 22px;
+  overflow: auto;
+  flex: 1;
+}
+
+#ts2ModalRoot .ts2m-summary {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #2c3a52;
+  white-space: pre-wrap;
+}
+
+#ts2ModalRoot .ts2m-actions {
+  padding: 12px 22px 18px;
+  border-top: 1px solid #eef2fb;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+#ts2ModalRoot .ts2m-btn {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dfe8f7;
+  background: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  color: #24324a;
+}
+
+#ts2ModalRoot .ts2m-btn:hover {
+  background: #f5f8ff;
+}
+
+#ts2ModalRoot .ts2m-btn-primary {
+  background: #0462D2;
+  border-color: transparent;
+  color: #fff;
+}
+
+#ts2ModalRoot .ts2m-btn-primary:hover {
+  filter: brightness(0.98);
+}
+
+/* 모달 열렸을 때 바디 스크롤 잠금 */
+body.is-modal-open {
+  overflow: hidden;
+}
+
+/* TS2 기사 이미지 크기 제한 (안 잘리게) */
+#ts2ModalRoot .ts2m-media {
+  margin-bottom: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff; /* 여백 생길 때 배경 */
+}
+
+#ts2ModalRoot .ts2m-img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain; /* 사실 height:auto면 영향 거의 없지만 의미상 OK */
+  display: block;
+}
+
+
+/* =========================
+   TS2 헤더 찌그러짐 방지
+========================= */
+
+/* 기본: 좌측 영역이 줄어들 수 있게 + pill은 안 줄어들게 */
+.ts2-colhead {
+  min-width: 0;
+}
+
+.ts2-coltitle {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ts2-pill {
+  flex: 0 0 auto;
+  /* ✅ pill 절대 찌그러지지 않게 */
+  white-space: nowrap;
+}
+
+/* 제목은 줄바꿈 대신 말줄임(한 줄 유지) */
+.ts2-h {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 드롭다운도 필요하면 살짝 줄어들게(너무 고정폭이면 제목이 찌그러짐) */
+.ts2-sort.cselect {
+  flex: 0 1 140px;
+  /* ✅ 150px 고정 대신 shrink 허용 */
+  min-width: 120px;
+}
+
+/* 반응형 */
+@media (max-width: 1300px) {
+  .ts2-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ts2-col--neg {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .main1-body {
+    flex-direction: column;
+  }
+
+  .summary {
+    width: 100%;
+  }
+
+  .ranking {
+    min-width: 0;
+  }
+
+  .sidebar {
+    display: none !important;
+  }
+
+  .menu li.active>a {
+    display: block;
+    background: #e8f1ff;
+    color: #0462D2;
+    border-radius: 12px;
+  }
+
+  .menu li.active>a:hover {
+    background: #dcebff;
+  }
+
+  .mains {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .app {
+    gap: 0;
+    /* 사이드바 빠지면서 생기는 여백 방지 */
+    grid-template-columns: 1fr !important;
+  }
+
+  .ts2-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts2-grid.is-scroll {
+    display: grid;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+
+  .ts2-menucard {
+    min-height: auto;
+  }
+
+  .ts2-col {
+    min-height: 520px;
+  }
+
+  .ts3-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 920px) {
+  .mains {
+    --content-pad: 0px;
+  }
+
+  /* 툴바: wrap 허용 + 간격/패딩 조금 축소 */
+  .main-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  /* 날짜/세그먼트 묶음 */
+  .date-range {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* input이 너무 커서 라벨을 밀어버리면, 모바일에서 폭을 살짝 고정 */
+  .mains .date-pill input[type="date"] {
+    width: 140px;
+    /* 130~160 사이에서 취향대로 */
+  }
+
+  /* 날짜 pill 2개: 2열로 (공간 부족하면 자동 줄바꿈) */
+  .date-pill {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 180px;
+    /* 필요하면 160~200 사이로 조절 */
+  }
+
+
+  /* 키워드 드롭다운: 한 줄을 통째로 차지 (날짜 다음 줄) */
+  .toolbar-right {
+    flex: 1 1 100%;
+    order: 3;
+    margin-left: 0;
+    /* 기존 margin-left:auto 때문에 이상해지는 거 방지 */
+  }
+
+  .cselect {
+    width: 100%;
+  }
+
+  .cselect__btn {
+    width: 100%;
+  }
+
+  /* 일별/주별/월별/연도별: “드롭다운 아래”로 내려오기 */
+  .segmented {
+    flex: 1 1 100%;
+    order: 4;
+    margin-left: 0;
+    justify-content: flex-start;
+    /* 버튼이 길면 가로 스크롤로 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* 버튼은 줄바꿈하지 말고 가로로 쭉 */
+  .seg-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 8px 12px;
+    word-break: keep-all;
+  }
+
+  /* 앵커 보정(툴바 높이가 늘어나니까) */
+  #main2,
+  #main3 {
+    scroll-margin-top: 160px;
+  }
+
+  /* has-tip 변수 통일 */
+  .rank-head .has-tip {
+    --info: 18px;
+    /* info-btn 실제 크기 */
+    --arrow: 10px;
+    /* 화살표(마름모) 크기 */
+  }
+}
+
+@media (max-width: 480px) {
+  .date-pill {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 9px 10px;
+    gap: 8px;
+  }
+
+  .date-label {
+    display: none;
+    /* "시작일/종료일" 텍스트 숨겨서 공간 확보 */
+  }
+
+  .seg-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+/* ✅ “열이 좁아지는 구간”에서 드롭다운을 아래로 내려서 공간 확보 */
+@media (max-width: 1320px) {
+  .ts2-colhead {
+    flex-wrap: wrap;
+    /* ✅ 여기서부터 찌그러지지 않게 줄바꿈 허용 */
+    row-gap: 8px;
+  }
+
+  .ts2-sort.cselect {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .ts2-sort .cselect__btn {
+    width: 100%;
+  }
+}
+
+/* 기사 상세 이미지 CSS */
+.ts2m-media {
+  margin: 10px 0 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f3f5f8;
+}
+
+.ts2m-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ts2-sumbox{ position:relative; margin-top:10px; border:1px solid #e6eefc; border-radius:12px; padding:12px; background:#fff; }
+.ts2-sumtext{ white-space:pre-wrap; line-height:1.5; }
+
+

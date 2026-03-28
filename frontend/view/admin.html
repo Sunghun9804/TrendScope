@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 - 수집 모니터링</title>
+
+  <link rel="icon" href="./img/favicon.png" />
+
+  <!-- ✅ /view 마운트 기준 경로 -->
+  <link rel="stylesheet" href="/view/css/my_page_style.css" />
+  <link rel="stylesheet" href="/view/css/main_style.css" />
+  <link rel="stylesheet" href="/view/css/admin.css" />
+
+  <!-- ✅ 권한 확인 전 화면 깜빡임 방지 -->
+  <style>
+    body.preauth {
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body class="preauth layout-admin">
+  <!-- main.html과 동일 헤더 구조 -->
+  <div id="headerMount" aria-label="공통 헤더"></div>
+
+
+  <div class="app">
+    <aside id="sidebarMount" class="sidebar" aria-label="사이드바"></aside>
+
+    <main class="mains">
+      <!-- 상단 툴바 (요청대로: 진행률 pill 왼쪽, 날짜/조회 오른쪽) -->
+      <div class="main-toolbar admin-toolbar">
+        <div class="admin-pill" id="runRatePill" title="재실행 진행률" hidden>
+          <span class="admin-pill__label" id="runRateLabel">분석 작업 실행 중</span>
+
+          <!-- ✅ 안내 i 버튼 -->
+          <button type="button" class="admin-pill__info" id="runRateInfo" aria-label="진행 안내" title="안내">i</button>
+
+          <strong id="runRate">(0%)</strong>
+        </div>
+
+        <div class="date-range admin-date-range">
+          <label class="date-pill">
+            <span class="date-icon" aria-hidden="true">📅</span>
+            <span class="date-label">시작일</span>
+            <input id="startDate" type="date" />
+          </label>
+
+          <label class="date-pill">
+            <span class="date-icon" aria-hidden="true">📅</span>
+            <span class="date-label">종료일</span>
+            <input id="endDate" type="date" />
+          </label>
+
+          <button type="button" class="admin-btn admin-btn--primary" id="btnSearch">조회</button>
+        </div>
+      </div>
+
+      <div class="main-scroll">
+        <section class="admin-panel">
+          <div class="admin-panel-head">
+            <h2 class="admin-title">조회 결과 / 오류 내용 확인</h2>
+            <span class="admin-sub">행을 클릭하면 상세 메시지를 볼 수 있어요.</span>
+          </div>
+
+          <div class="admin-table-wrap">
+            <!-- 헤더 고정 -->
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width:70px;">run_id</th>
+                  <th style="width:120px;">작업 이름</th>
+                  <th style="width:160px;">시작시간</th>
+                  <th style="width:160px;">종료시간</th>
+                  <th style="width:150px;">작업시각</th>
+                  <th style="width:110px;">상태코드</th>
+                  <th>메시지</th>
+                </tr>
+              </thead>
+            </table>
+
+            <!-- 바디 스크롤 -->
+            <div class="admin-table-body" id="tableBodyWrap">
+              <table class="admin-table admin-table--body">
+                <tbody id="tbodyRuns"></tbody>
+              </table>
+            </div>
+
+            <!-- 무한스크롤 로딩/완료 표시 -->
+            <div class="admin-infinite-loader" id="infiniteLoader" hidden>
+              <div class="admin-spinner" aria-hidden="true"></div>
+              <span id="infiniteLoaderText">로딩 중...</span>
+            </div>
+
+            <div class="admin-empty" id="emptyState" hidden>조회 결과가 없습니다.</div>
+          </div>
+        </section>
+
+        <!-- ✅ 토스트: “재실행 중에는 재실행 불가” 안내(클릭/닫기) -->
+        <div class="admin-toast" id="toast" hidden>
+          <div class="admin-toast__icon">i</div>
+          <div class="admin-toast__text" id="toastText">
+            현재 실행이 진행 중입니다.<br />
+            완료까지 재실행은 제한되며,<br />
+            조회 기능은 정상적으로 이용 가능합니다.
+          </div>
+          <button class="admin-toast__close" id="btnToastClose" aria-label="닫기">×</button>
+        </div>
+
+        <!-- ✅ 상세 모달(메인 영역에만) -->
+        <div class="admin-modal" id="detailModal" hidden>
+          <div class="admin-modal__backdrop" data-close="true"></div>
+
+          <div class="admin-modal__card" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+            <div class="admin-modal__head">
+              <div class="admin-modal__left">
+                <h3 class="admin-modal__title" id="detailTitle">상세</h3>
+                <button type="button" class="admin-btn admin-btn--ghost" id="btnRun">실행</button>
+              </div>
+              <button type="button" class="admin-modal__close" id="btnCloseModal" aria-label="닫기">×</button>
+            </div>
+
+            <div class="admin-modal__meta" id="detailMeta"></div>
+
+            <div class="admin-modal__content">
+              <div class="admin-modal__label">메시지</div>
+              <pre class="admin-modal__pre" id="detailMessage"></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ 실행 확인 모달 -->
+        <div class="admin-confirm" id="confirmModal" hidden>
+          <div class="admin-confirm__backdrop" data-close="true"></div>
+          <div class="admin-confirm__card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <div class="admin-confirm__title" id="confirmTitle">※ 실행 전 확인 ※</div>
+            <div class="admin-confirm__desc">
+              실행을 시작하면 수집 작업이 진행되며,<br />
+              완료까지 다소 시간이 소요될 수 있습니다.<br />
+              수집이 진행 중인 동안에는 재실행할 수 없으나,<br />
+              조회 기능은 정상적으로 이용 가능합니다.<br /><br />
+              계속 실행하시겠습니까?
+            </div>
+            <div class="admin-confirm__actions">
+              <button type="button" class="admin-btn admin-btn--ghost" id="btnConfirmCancel">취소</button>
+              <button type="button" class="admin-btn admin-btn--primary" id="btnConfirmOk">확인</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/header_init.js" defer></script>
+  <script src="/static/sidebar_init.js" defer></script>
+  <script src="/static/sidebar.js" defer></script>
+
+  <!-- ✅ /api/session 기반 진입 가드 + admin.js를 권한 통과 후 로드 -->
+  <script>
+    console.log("✅ admin.html LOADED");
+
+    async function requireAdminOrRedirect() {
+      try {
+        const r = await fetch("/api/session", { credentials: "include" });
+        if (!r.ok) throw new Error("session api failed");
+        const body = await r.json();
+
+        const loggedIn = !!body.logged_in;
+        const isAdmin = loggedIn && !!body.admin_in;
+
+        if (!loggedIn) {
+          location.replace("/login");
+          return false;
+        }
+        if (!isAdmin) {
+          alert("관리자로 등록된 회원만 접근 가능합니다.");
+          location.replace("/main");
+          return false;
+        }
+
+        // 관리자 통과 → 화면 표시
+        document.body.classList.remove("preauth");
+        return true;
+      } catch (e) {
+        location.replace("/login");
+        return false;
+      }
+    }
+
+    function loadAdminJs() {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "/static/admin.js";
+        s.defer = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => reject(new Error("failed to load /static/admin.js"));
+        document.body.appendChild(s);
+      });
+    }
+
+    (async function boot() {
+      const ok = await requireAdminOrRedirect();
+      if (!ok) return;
+
+      // ✅ 권한 통과 후에만 admin.js 로드
+      try {
+        await loadAdminJs();
+      } catch (e) {
+        console.error(e);
+        alert("관리자 스크립트 로딩에 실패했습니다.");
+      }
+    })();
+  </script>
+</body>
+
+</html>

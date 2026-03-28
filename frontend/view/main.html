@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>경제 키워드 트렌드</title>
+    <link rel="icon" href="./img/favicon.png">
+    <link rel="stylesheet" href="./css/main_style.css" />
+    <link rel="stylesheet" href="./css/my_page_style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet"> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+</head>
+
+<body>
+    <div id="headerMount" aria-label="공통 헤더"></div>
+    <div class="app">
+        <aside id="sidebarMount" class="sidebar" aria-label="사이드바"></aside>
+        <main class="mains"> <!-- 상단 필터 바 -->
+            <div class="main-toolbar">
+                <div class="date-range"> <label class="date-pill"> <span class="date-icon" aria-hidden="true">📅</span>
+                        <span class="date-label">시작일</span> <input id="startDate" type="date" /> </label> <label
+                        class="date-pill"> <span class="date-icon" aria-hidden="true">📅</span> <span
+                            class="date-label">종료일</span> <input id="endDate" type="date" /> </label>
+                    <div class="segmented" role="tablist" aria-label="기간 단위"> <button type="button"
+                            class="seg-btn is-active" data-grain="day" role="tab" aria-selected="true">일별</button>
+                        <button type="button" class="seg-btn" data-grain="week" role="tab"
+                            aria-selected="false">주별</button> <button type="button" class="seg-btn" data-grain="month"
+                            role="tab" aria-selected="false">월별</button> <button type="button" class="seg-btn"
+                            data-grain="year" role="tab" aria-selected="false">연도별</button> </div>
+                </div> <!-- 오른쪽 드롭다운 -->
+                <div class="toolbar-right">
+                    <div class="cselect" id="keywordDropdown"> <button type="button" class="cselect__btn"
+                            aria-haspopup="listbox" aria-expanded="false"> <span class="cselect__value">주식</span> <span
+                                class="cselect__caret" aria-hidden="true">▾</span> </button>
+                        <ul class="cselect__list" role="listbox" tabindex="-1" aria-label="키워드 선택">
+                            <li class="cselect__opt is-selected" role="option" data-value="주식" aria-selected="true">주식
+                            </li>
+                            <li class="cselect__opt" role="option" data-value="부동산">부동산</li>
+                            <li class="cselect__opt" role="option" data-value="고용">고용</li>
+                            <li class="cselect__opt" role="option" data-value="경기침체">경기침체</li>
+                            <li class="cselect__opt" role="option" data-value="유가">유가</li>
+                            <li class="cselect__opt" role="option" data-value="반도체">반도체</li>
+                            <li class="cselect__opt" role="option" data-value="수출">수출</li>
+                            <li class="cselect__opt" role="option" data-value="노동">노동</li>
+                            <li class="cselect__opt" role="option" data-value="경제">경제</li>
+                            <li class="cselect__opt" role="option" data-value="현금">현금</li>
+                        </ul> <input type="hidden" name="keyword" value="주식">
+                    </div>
+                </div>
+            </div>
+            <div class="main-scroll">
+                <section id="main1" class="main1-panel"> <!-- 본문 -->
+                    <div class="main1-body"> <!-- 키워드 랭킹 -->
+                        <section class="ranking">
+                            <div class="section-head">
+                                <div class="section-head-left">
+                                    <h2 class="section-title">키워드 랭킹</h2> <span class="pill">TOP10</span>
+                                </div>
+                                <div class="section-note rate-move-note"> <span class="note-text"></span> </div>
+                            </div>
+                            <div class="rank-table">
+                                <div class="rank-row rank-head">
+                                    <div class="c-rank">순위</div>
+                                    <div class="c-keyword">키워드</div>
+                                    <div class="c-count">언급량</div>
+                                    <div class="c-rate has-tip">증감률 <button type="button" class="info-btn"
+                                            aria-label="증감률 안내" aria-expanded="false">i</button>
+                                        <div class="tooltip" role="tooltip" hidden> 선택한 기간의 종료일 기준 언급량을<br> 이전 동일 기간과
+                                            비교한 변화 비율입니다.<br><br> 이전 기간 언급량이 없는 경우 NEW로 표시됩니다. </div>
+                                    </div>
+                                    <div class="c-move has-tip">변동 <button type="button" class="info-btn"
+                                            aria-label="변동 안내" aria-expanded="false">i</button>
+                                        <div class="tooltip" role="tooltip" hidden> 선택한 기간의 키워드 순위가 <br> 종료일 기준으로 이전 동일
+                                            기간과 비교해 <br> 얼마나 변했는지를 나타냅니다.<br><br> 이전 기간 언급량이 없는 경우 NEW로 표시됩니다. </div>
+                                    </div>
+                                </div>
+                                <div id="rankList" class="rank-list" role="list"></div>
+                            </div>
+                        </section> <!-- 기사 요약 패널 -->
+                        <aside class="summary">
+                            <p>※ 랭킹 키워드 선정 이유는
+                            <span class="highlight-blue">일별 선택</span>을 했을 때만 제공됩니다.
+                            </p>
+                            <div class="summary-card">
+                                <div class="summary-title"> <span class="tag">선정 이유</span> <strong
+                                        id="summaryKeyword">주식</strong> </div>
+                                <div class="summary-content">
+                                    <div class="summary-subhead">선정이유</div>
+                                    <ol id="summaryList" class="summary-list"></ol>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+                <section id="main2" class="ts2-panel" aria-label="기사">
+                    <div class="ts2-grid"> <!-- 긍정 -->
+                        <section class="ts2-col ts2-col--pos" aria-label="긍정 기사섹션">
+                            <div class="ts2-colhead">
+                                <div class="ts2-coltitle">
+                                    <h3 class="ts2-h">긍정 기사섹션</h3> <span class="ts2-pill ts2-pill--pos">긍정</span>
+                                </div> <!-- cselect로 교체 -->
+                                <div class="cselect cselect--sm ts2-sort" data-sort="pos"> <button type="button"
+                                        class="cselect__btn" aria-haspopup="listbox" aria-expanded="false"> <span
+                                            class="cselect__value">최신순</span> <span class="cselect__caret"
+                                            aria-hidden="true">▾</span> </button>
+                                    <ul class="cselect__list" role="listbox" tabindex="-1" aria-label="긍정 정렬">
+                                        <li class="cselect__opt is-selected" role="option" data-value="recent"
+                                            aria-selected="true">최신순</li>
+                                        <li class="cselect__opt" role="option" data-value="old">오래된순</li>
+                                        <li class="cselect__opt" role="option" data-value="popular">인기순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_high">신뢰도 높은 순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_low">신뢰도 낮은 순</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="ts2-colbody">
+                                <div class="ts2-list" id="ts2ListPos"></div>
+                                <div class="ts2-pager" aria-label="긍정 페이지네이션"> <button class="ts2-pagebtn"
+                                        type="button">«</button> <span class="ts2-pagetext">1 / N</span> <button
+                                        class="ts2-pagebtn" type="button">»</button> </div>
+                            </div>
+                        </section> <!-- 중립 -->
+                        <section class="ts2-col ts2-col--neu" aria-label="중립 기사섹션">
+                            <div class="ts2-colhead">
+                                <div class="ts2-coltitle">
+                                    <h3 class="ts2-h">중립 기사섹션</h3> <span class="ts2-pill ts2-pill--neu">중립</span>
+                                </div> <!-- ✅ cselect로 교체 -->
+                                <div class="cselect cselect--sm ts2-sort" data-sort="neu"> <button type="button"
+                                        class="cselect__btn" aria-haspopup="listbox" aria-expanded="false"> <span
+                                            class="cselect__value">최신순</span> <span class="cselect__caret"
+                                            aria-hidden="true">▾</span> </button>
+                                    <ul class="cselect__list" role="listbox" tabindex="-1" aria-label="중립 정렬">
+                                        <li class="cselect__opt is-selected" role="option" data-value="recent"
+                                            aria-selected="true">최신순</li>
+                                        <li class="cselect__opt" role="option" data-value="old">오래된순</li>
+                                        <li class="cselect__opt" role="option" data-value="popular">인기순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_high">신뢰도 높은 순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_low">신뢰도 낮은 순</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="ts2-colbody">
+                                <div class="ts2-list" id="ts2ListNeu"></div>
+                                <div class="ts2-pager" aria-label="중립 페이지네이션"> <button class="ts2-pagebtn"
+                                        type="button">«</button> <span class="ts2-pagetext">1 / N</span> <button
+                                        class="ts2-pagebtn" type="button">»</button> </div>
+                            </div>
+                        </section> <!-- 부정 -->
+                        <section class="ts2-col ts2-col--neg" aria-label="부정 기사섹션">
+                            <div class="ts2-colhead">
+                                <div class="ts2-coltitle">
+                                    <h3 class="ts2-h">부정 기사섹션</h3> <span class="ts2-pill ts2-pill--neg">부정</span>
+                                </div> <!-- cselect로 교체 -->
+                                <div class="cselect cselect--sm ts2-sort" data-sort="neg"> <button type="button"
+                                        class="cselect__btn" aria-haspopup="listbox" aria-expanded="false"> <span
+                                            class="cselect__value">최신순</span> <span class="cselect__caret"
+                                            aria-hidden="true">▾</span> </button>
+                                    <ul class="cselect__list" role="listbox" tabindex="-1" aria-label="부정 정렬">
+                                        <li class="cselect__opt is-selected" role="option" data-value="recent"
+                                            aria-selected="true">최신순</li>
+                                        <li class="cselect__opt" role="option" data-value="old">오래된순</li>
+                                        <li class="cselect__opt" role="option" data-value="popular">인기순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_high">신뢰도 높은 순</li>
+                                        <li class="cselect__opt" role="option" data-value="trust_low">신뢰도 낮은 순</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="ts2-colbody">
+                                <div class="ts2-list" id="ts2ListNeg"></div>
+                                <div class="ts2-pager" aria-label="부정 페이지네이션"> <button class="ts2-pagebtn"
+                                        type="button">«</button> <span class="ts2-pagetext">1 / N</span> <button
+                                        class="ts2-pagebtn" type="button">»</button> </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+                <section id="main3" class="ts3-panel" aria-label="키워드 언급량 및 감성분석">
+                    <div class="ts3-grid"> <!-- 상단: 키워드 상세(라인차트 자리) -->
+                        <section class="ts3-card ts3-card--wide" aria-label="키워드 상세">
+                            <div class="ts3-head ts3-head--wide">
+                                <div class="ts3-head-left">
+                                    <h3 class="ts3-title">키워드 상세</h3>
+                                    <div class="ts3-klist" role="tablist" aria-label="키워드 선택"> <button type="button"
+                                            class="ts3-kbtn is-active" data-keyword="주식" role="tab"
+                                            aria-selected="true">주식</button> <button type="button" class="ts3-kbtn"
+                                            data-keyword="부동산" role="tab" aria-selected="false">부동산</button> <button
+                                            type="button" class="ts3-kbtn" data-keyword="고용" role="tab"
+                                            aria-selected="false">고용</button> <button type="button" class="ts3-kbtn"
+                                            data-keyword="경기침체" role="tab" aria-selected="false">경기침체</button> <button
+                                            type="button" class="ts3-kbtn" data-keyword="유가" role="tab"
+                                            aria-selected="false">유가</button> <button type="button" class="ts3-kbtn"
+                                            data-keyword="반도체" role="tab" aria-selected="false">반도체</button> <button
+                                            type="button" class="ts3-kbtn" data-keyword="수출" role="tab"
+                                            aria-selected="false">수출</button> <button type="button" class="ts3-kbtn"
+                                            data-keyword="노동" role="tab" aria-selected="false">노동</button> <button
+                                            type="button" class="ts3-kbtn" data-keyword="경제" role="tab"
+                                            aria-selected="false">경제</button> <button type="button" class="ts3-kbtn"
+                                            data-keyword="현금" role="tab" aria-selected="false">현금</button> </div>
+                                </div>
+                            </div>
+                            <div class="ts3-body"> <!-- 나중에 Chart.js/ECharts 붙이기 쉬우라고 canvas 자리 확보 -->
+                                <div class="ts3-chartbox" id="ts3LineBox" aria-label="언급량 및 감성 추이 그래프 영역">
+                                    <div class="ts3-placeholder"> 그래프 영역 (추후 라인차트 렌더링) </div> <canvas id="ts3LineCanvas"
+                                        class="ts3-canvas" aria-label="언급량 및 감성 추이 라인차트"></canvas>
+                                </div>
+                            </div>
+                        </section> <!-- 하단 좌: 워드클라우드 -->
+                        <section class="ts3-card" aria-label="워드클라우드">
+                            <div class="ts3-head">
+                                <div class="ts3-head-left">
+                                    <h3 class="ts3-title">워드클라우드</h3> <span class="ts3-tag" id="ts3WordTag">주식</span>
+                                </div>
+                            </div>
+                            <div class="ts3-body">
+                                <div class="ts3-cloud" id="ts3WordCloud" aria-label="워드클라우드 자리">
+                                    <!-- JS가 샘플 단어를 채움(나중엔 실제 워드클라우드로 교체) --> </div>
+                            </div>
+                        </section> <!-- 하단 우: 도넛(감성 비율) -->
+                        <section class="ts3-card" aria-label="감성 비율 그래프">
+                            <div class="ts3-head ts3-head--space">
+                                <div class="ts3-head-left">
+                                    <h3 class="ts3-title">그래프</h3> <span class="ts3-tag" id="ts3DonutTag">주식</span>
+                                </div>
+                                <div class="ts3-legend" aria-label="범례"> <span class="ts3-leg"><i
+                                            class="ts3-dot ts3-dot--pos"></i> 긍정</span> <span class="ts3-leg"><i
+                                            class="ts3-dot ts3-dot--neu"></i> 중립</span> <span class="ts3-leg"><i
+                                            class="ts3-dot ts3-dot--neg"></i> 부정</span> </div>
+                            </div>
+                            <div class="ts3-body">
+                                <div class="ts3-donutwrap"> <!-- CSS conic-gradient로 임시 도넛 -->
+                                    <div id="ts3Donut" class="ts3-donut" role="img" aria-label="감성 비율 도넛 차트"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="/static/header_init.js" defer></script>
+    <script src="/static/base.js" defer></script>
+    <script src="/static/sidebar_init.js" defer></script>
+    <script src="/static/sidebar.js" defer></script>
+    <script src="/static/main.js" defer></script>
+</body>
+
+</html>

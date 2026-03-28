@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrendScope</title>
+  <!-- Font (선호 폰트가 있으면 교체하세요: Pretendard, Apple SD Gothic Neo 등) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon" href="/view/img/favicon.png">
+  <link rel="stylesheet" href="/view/css/home_style.css" />
+</head>
+
+<body>
+  <!-- 배경 오브젝트 -->
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="shell topbar__inner">
+      <a class="brand" href="/">
+        <span class="topbar_logo"><img src="/view/img/logo_blue.png" alt=""></span>
+      </a>
+
+      <nav class="topbar__actions" aria-label="상단 메뉴">
+        <!-- 비로그인 상태 -->
+        <a class="topbar__link js-auth-out" href="/login">로그인</a>
+        <a class="btn btn--primary btn--sm js-auth-out" href="/signup">회원가입</a>
+
+        <!-- 로그인 상태 -->
+        <a class="topbar__link js-auth-in" href="/my_page">마이페이지</a>
+        <a class="btn btn--soft btn--sm js-auth-in" href="/logout">로그아웃</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- HERO -->
+    <section class="hero">
+      <p class="hero__eyebrow">경제 트렌드 궁금할 땐?</p>
+      <h1 class="hero__title">TrendScope</h1>
+      <p class="hero__subtitle">새로운 경험을 해보세요</p>
+
+      <a class="btn btn--primary btn--lg hero__cta" href="/main">지금 시작하기</a>
+    </section>
+
+    <!-- PRODUCT SHOT -->
+    <section id="product" class="product">
+      <div class="product__frame">
+        <div class="product-slider" aria-label="기능 미리보기 슬라이더">
+          <div class="product-slider__track">
+          <!-- 0 -->
+          <div class="product-slider__slide">
+            <div class="product-slider__frame">
+              <img class="product-slider__img" src="/view/img/home_slider_1.png" alt="키워드 트렌딩 분석 미리보기" />
+            </div>
+          </div>
+
+          <!-- 1 -->
+          <div class="product-slider__slide">
+            <div class="product-slider__frame">
+              <img class="product-slider__img" src="/view/img/home_trust.png" alt="낚시성 기사 판별 미리보기" />
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="product-slider__slide">
+            <div class="product-slider__frame">
+              <img class="product-slider__img" src="/view/img/home_sentiment.png" alt="기사 감정 분석 미리보기" />
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="product-slider__slide">
+            <div class="product-slider__frame">
+              <img class="product-slider__img" src="/view/img/home_slider_4.png" alt="키워드 언급량 분석 미리보기" />
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="product-slider__slide">
+            <div class="product-slider__frame">
+              <img class="product-slider__img" src="/view/img/home_summary.png" alt="기사 요약 서비스 미리보기" />
+            </div>
+          </div>
+        </div> 
+      </div>
+
+    </div>
+
+    <div id="features" class="feature-row">
+        <article class="mini-card is-active" data-slide="0" tabindex="0" role="button" aria-label="키워드 트렌딩 분석 보기">
+          <div class="mini-card__icon mini-card__icon--blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 19V5M4 19H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M7 15l3-4 3 3 5-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="mini-card__title">키워드 트렌딩 분석</h3>
+          <p class="mini-card__desc">기간별 Top10 키워드를 한눈에 보여줘요.</p>
+        </article>
+
+        <article class="mini-card" data-slide="1" tabindex="0" role="button" aria-label="낚시성 기사 판별 보기">
+          <div class="mini-card__icon mini-card__icon--sky" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M15 17l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="mini-card__title">낚시성 기사 판별</h3>
+          <p class="mini-card__desc">클릭 유도성(낚시성) 여부를 판별해 표시해요.</p>
+        </article>
+
+        <article class="mini-card" data-slide="2" tabindex="0" role="button" aria-label="기사 감정 분석 보기">
+          <div class="mini-card__icon mini-card__icon--indigo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M7 17v-6M12 17V7M17 17v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="mini-card__title">기사 감정 분석</h3>
+          <p class="mini-card__desc">기사 분위기를 긍·부정·중립으로 분석해요.</p>
+        </article>
+
+        <article class="mini-card" data-slide="3" tabindex="0" role="button" aria-label="키워드 언급량 분석 보기">
+          <div class="mini-card__icon mini-card__icon--purple" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M5 9h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M7 21h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M8 9c0 2 2 4 4 4s4-2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="mini-card__title">키워드 언급량 분석</h3>
+          <p class="mini-card__desc">키워드 언급량 변화를 그래프로 보여줘요.</p>
+        </article>
+
+        <article class="mini-card" data-slide="4" tabindex="0" role="button" aria-label="기사 요약 서비스 보기">
+          <div class="mini-card__icon mini-card__icon--gray" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M7 7h10M7 12h10M7 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9l-4 2v-2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+                stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="mini-card__title">기사 요약 서비스</h3>
+          <p class="mini-card__desc">기사 핵심만 짧게 요약해 제공해요.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="usecases">
+      <h2 class="usecases__title">이렇게 활용하고 있어요!</h2>
+
+      <div class="usecase">
+        <div class="usecase__text">
+          <span class="pill pill--blue">경제 용어 한 번에 정리</span>
+          <h3 class="usecase__headline">초심자도 이해하는 경제<br />헷갈리는 용어, 어디서부터 볼까?</h3>
+          <p class="usecase__desc">
+            용어 사전으로 핵심 개념을 먼저 잡고,<br />
+            기사·키워드와 연결해서 흐름까지 같이 이해해요.
+          </p>
+        </div>
+
+        <div class="usecase__media">
+          <div class="media-frame">
+            <img src="/view/img/home_1.png" alt="용어 정리 화면 예시" />
+          </div>
+        </div>
+      </div>
+
+      <div class="usecase usecase--reverse">
+        <div class="usecase__text">
+          <span class="pill pill--indigo">내 손으로 분석하기</span>
+          <h3 class="usecase__headline">비교로 더 선명해지는 결론<br />A 키워드 vs B 키워드, 뭐가 뜨고 있지?</h3>
+          <p class="usecase__desc">
+            기간을 고르고 키워드를 비교하면<br />
+            언급량·감정·선호도 흐름을 한 번에 분석할 수 있어요.
+          </p>
+        </div>
+
+        <div class="usecase__media">
+          <div class="media-frame">
+            <img src="/view/img/home_2.png" alt="키워드 비교 화면 예시" />
+          </div>
+        </div>
+      </div>
+
+      <div class="usecase">
+        <div class="usecase__text">
+          <span class="pill pill--sky">오늘의 이슈 한눈에</span>
+          <h3 class="usecase__headline">지금 뜨는 흐름을 한눈에<br />오늘의 이슈, 왜 갑자기 터졌을까?</h3>
+          <p class="usecase__desc">
+            Top10 키워드와 관련 기사들을 빠르게 연결하고,<br />
+            시장·정책 이슈의 맥락을 실시간으로 파악해요.
+          </p>
+        </div>
+
+        <div class="usecase__media">
+          <div class="media-frame">
+            <img src="/view/img/home_3.png" alt="오늘의 이슈 화면 예시" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <div class="footer__brand">TrendScope</div>
+      <div class="footer__meta">
+        <div>문의: TrendScope</div>
+        <div>© TrendScope.</div>
+      </div>
+    </div>
+  </footer>
+  <script src="/static/base.js" defer></script>
+<script src="/static/home.js" defer></script>
+</body>
+
+</html>
